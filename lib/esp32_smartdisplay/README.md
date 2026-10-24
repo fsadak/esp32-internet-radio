@@ -108,7 +108,7 @@ This library depends on:
 
 Get started by following the steps below. It is also highly recommended to look at the demo application [esp32-smartdisplay-demo](https://github.com/rzeldent/esp32-smartdisplay-demo) to quickly see the possibilities of this library.
 
-![Demo screen](assets/images/PXL_20231130_225143662.jpg)
+![Demo screen](https://raw.githubusercontent.com/rzeldent/esp32-smartdisplay/38e9ebabe3e4044159c4e95192d432607ed70588/assets/images/PXL_20231130_225143662.jpg)
 
 This demo provides:
 
@@ -124,7 +124,7 @@ If you run into problems, first try to open a discussion on the [github esp32-sm
 
 ### Step 1: Download (or open) PlatformIO
 
-[![PlatformIO](assets/images/PlatformIO.png)](https://platformio.org/)
+[![PlatformIO](https://raw.githubusercontent.com/rzeldent/esp32-smartdisplay/38e9ebabe3e4044159c4e95192d432607ed70588/assets/images/PlatformIO.png)](https://platformio.org/)
 
 This library is made for usage in PlatformIO. If not familiar with PlatformIO please take a look at their site and micro controller boards they support. However these boards only use the Arduino platform and ESP32 boards.
 
@@ -322,7 +322,7 @@ void loop()
 
 There is a good UI designer available for LVGL and free (but some limitations) for personal use: [SquareLine Studio](https://squareline.io/):
 
-[![SquareLine Studio](assets/images/SquareLineStudio.png)](https://squareline.io/)
+[![SquareLine Studio](https://raw.githubusercontent.com/rzeldent/esp32-smartdisplay/38e9ebabe3e4044159c4e95192d432607ed70588/assets/images/SquareLineStudio.png)](https://squareline.io/)
 
 This tool makes it easy to create transitions, insert images, attach events, work with round screens etc.. A big advantage is that the UI C-code is generated!
 SquareLine als provides drivers but only export the ui files!
@@ -446,7 +446,7 @@ This function allows only 8 LED colors:
 | 0   | 1   | 1   | Cyan    |
 | 1   | 1   | 1   | White   |
 
-![RGB Mix](assets/images/RGB.png)
+![RGB Mix](https://raw.githubusercontent.com/rzeldent/esp32-smartdisplay/38e9ebabe3e4044159c4e95192d432607ed70588/assets/images/RGB.png)
 
 ### touch_calibration_data_t touch_calibration_data
 

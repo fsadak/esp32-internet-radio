@@ -324,6 +324,5 @@ Aşağıdaki kayıtlar ölü yayın ilan edilmemiştir; yalnızca bu hazırlıkt
 - [PowerApp](https://www.powerapp.com.tr/). Power doğrudan mount adresleri resmi oynatıcıdaki kanal kimlikleri ve sağlayıcının doğrudan akış örüntüsüyle oluşturulup ayrıca ses çerçeveleriyle sınandı; resmi sayfadaki HLS adresinin aynısı oldukları iddia edilmez.
 - [Kral Müzik](https://www.kralmuzik.com.tr/), [Best FM](https://www.bestfm.com.tr/), [Number1](https://www.numberone.com.tr/), Kafa Radyo resmi oynatıcı kodu ve doğrulanan alternatif dizin adresi.
 
-Ham adres kontrol kayıtları proje içinde `display-test/turkiye-radyo/` altındadır. Cihaz yazılımı ve cihazdaki mevcut istasyon listesi değiştirilmedi.
 
-Cihazda doğrulananlar: Radyo 7, Süper FM, TRT FM ve Radyo Spor; ayrıca 32 istasyonlu liste, 4. sayfa ve 32→1 dönüşü. [Cihaz test kaydı](CIHAZ-TESTLERI.md). Diğer yayınlar cihazda henüz doğrulanmadı.
+Seçme listede Radyo 7, Süper FM, TRT FM ve Radyo Spor için cihazda oynatma denenmiştir. Bu sonuç diğer yayınların cihaz uyumluluğunu doğrulamaz.

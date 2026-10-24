@@ -1,40 +1,22 @@
-# Türkçe ve Latin harf ekleri — 0.4.1
+# Türkçe ve Latin font desteği
 
-Önceki sürümde yalnızca 18 ve 36 piksel fontlar Türkçe harf ekine sahipti. Şarkı adı
-28 piksel, bazı başlık/açıklamalar 14 ve 24 piksel olduğundan bu alanlar eksikti.
+Üretilmiş 14/18/24/28/36 piksel fontlar `src/radio_turkish_*.c` dosyalarındadır.
+Normal PlatformIO derlemesinde yeniden üretim gerekmez. `RadioFonts.cpp`, ek
+karakterleri LVGL Montserrat fontlarına fallback olarak bağlar.
 
-Artık `src/radio_turkish_14.c`, `18.c`, `24.c`, `28.c`, `36.c` fontları kullanılır.
-Her boyutta 233 ek karakter vardır: Latin-1, Latin Extended-A, Türkçe ÇĞİÖŞÜçğıöşü,
-şapkalı ÂÎÛâîû ve yaygın tipografik tırnak/tire/noktalama işaretleri.
+Kaynak LVGL 9.6.0 paketindeki `scripts/generators/built_in_font/Montserrat-Medium.ttf`,
+dönüştürücü `lv_font_conv` 1.5.3'tür. Kaynak lisansı [Montserrat-OFL.txt](Montserrat-OFL.txt)
+dosyasındadır. Karakter kapsamı [radio-font-codepoints.json](radio-font-codepoints.json)
+içinde listelenir; bütün Unicode karakterleri kapsanmaz.
 
-Kaynak, kullanılan LVGL 9.6.0 paketindeki
-`scripts/generators/built_in_font/Montserrat-Medium.ttf`; dönüştürücü `lv_font_conv` 1.5.3.
-OFL lisansı `Montserrat-OFL.txt` içindedir. `RadioFonts.cpp`, mevcut Montserrat ASCII
-harfleri ve simgelerine bu ekleri fallback olarak bağlar. `RadioDisplay.cpp` bütün
-metin boyutlarını `radioFont()` üzerinden alır.
+Yeniden üretmek için PlatformIO bağımlılıklarını, Node.js ve npm'yi kurun;
+proje kökünde şu komutları çalıştırın:
 
-Üretilmiş font kaynakları projeye dahildir; normal PlatformIO derlemesinde
-font üreticisini çalıştırmanız gerekmez. Fontları yeniden üretmek için önce
-PlatformIO bağımlılıklarını kurun; LVGL içindeki kaynak TTF kullanılır.
-Node.js/npm ile proje kökünde şu komutları çalıştırın:
-
-```powershell
-npm install --prefix display-test/font-tools lv_font_conv@1.5.3
+```sh
+npm install --prefix .tools/font-tools lv_font_conv@1.5.3
 node design/fonts/generate-radio-fonts.cjs
 ```
 
-Karakter listesi `radio-font-codepoints.json` içindedir. Üretici, kaynak fontta zorunlu
-Türkçe karakter eksikse hata verir. Dönüştürücü yalnızca `display-test/font-tools/`
-altındadır; firmware'e yeni kütüphane bağımlılığı eklenmedi.
-
-Gerçek LVGL font motoru ve üretilmiş bitmaplerle bilgisayar kontrolü:
-
-```powershell
-python display-test/build-host-lvgl.py
-& .\display-test\host-tools\ziglang\zig.exe c++ -target x86_64-windows-gnu -std=c++17 -O2 -DLV_CONF_INCLUDE_SIMPLE -I include -I .pio/libdeps/esp32_radio/lvgl tests/host/test_radio_fonts.cpp src/RadioFonts.cpp display-test/lvgl-font-host.lib -o display-test/test-radio-fonts.exe
-& .\display-test\test-radio-fonts.exe
-```
-
-Bu kontrol gerçek paneldeki görsel testi veya sunucunun gönderdiği metadata kodlamasının
-doğrulanmasını kapsamaz. Metin aktarımında veya yayıncı kodlamasında ayrıca hata varsa,
-font kapsamı tamamlandıktan sonra ham metadata örneğiyle incelenir.
+Üretici, zorunlu Türkçe karakterler kaynak fontta eksikse hata verir. Üretilen
+kaynakları gözden geçirin ve gerçek ekranda metinleri kontrol edin. Yayıncıdan
+bozuk kodlamayla gelen metadata, font kapsamından ayrı bir sorundur.

@@ -122,7 +122,7 @@ For offline MP3 playback, close Wi-Fi setup if it is open, insert the SD card an
 - With repeat disabled, playback advances automatically and stops after the last track.
 - Use **Radio / Back to radio** to return to the radio source.
 
-**After a restart, the last MP3 starts from the beginning.** Track position and paused state are intentionally not persisted. Earlier periodic position saves caused visible RGB display shifts; removing those writes resolved the periodic and seek-related shifts in user tests. Source/file changes are still saved.
+**After a restart, the last MP3 starts from the beginning.** Track position and paused state are intentionally not persisted. Earlier periodic position saves caused visible RGB display shifts; removing those writes resolved the observed periodic and seek-related shifts. Source/file changes are still saved.
 
 The MP3 browser lists at most **128 MP3 files/subfolders per folder**, scans at most **512 directory entries**, and accepts paths up to **240 bytes**. Only `.mp3` files are listed, case-insensitively. M4A, WebM and other local formats are outside this player's current scope.
 
@@ -225,9 +225,9 @@ Detailed engineering notes are currently mainly in Turkish:
 - [Settings](design/SETTINGS.md)
 - [Web interface](design/WEB-INTERFACE.md)
 - [Battery plan — deferred hardware work](design/BATTERY-POWER.md)
-- [Development history and remaining work](design/TODO.md)
+- [Roadmap](design/TODO.md)
 
-Some notes contain historical states and references to private development tools/backups. Those tools are not needed for the normal PlatformIO firmware build. Generated font sources are included; font regeneration is documented under [design/fonts](design/fonts).
+Generated font sources are included; regeneration is documented under [design/fonts](design/fonts).
 
 ## Credits and licensing
 

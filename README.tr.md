@@ -122,7 +122,7 @@ Ağ daha sonra **Ayarlar → Cihaz → Wi-Fi ağını ayarla / değiştir** yolu
 - Tekrar kapalıysa sonraki parçaya otomatik geçilir ve son parça bitince durulur.
 - **Radyo / Radyoya dön** ile radyo kaynağına geçilir.
 
-**Yeniden açılışta son MP3 en baştan çalar.** Konum ve duraklatma durumu bilerek kalıcı kaydedilmez. Önceki periyodik konum kayıtları RGB ekranda kaymaya yol açmıştı; bu yazımların kaldırılması kullanıcı testinde periyodik ve sarma kaynaklı kaymaları giderdi. Kaynak/dosya değişimleri kaydedilmeye devam eder.
+**Yeniden açılışta son MP3 en baştan çalar.** Konum ve duraklatma durumu bilerek kalıcı kaydedilmez. Önceki periyodik konum kayıtları RGB ekranda kaymaya yol açmıştı; bu yazımların kaldırılması gözlenen periyodik ve sarma kaynaklı kaymaları giderdi. Kaynak/dosya değişimleri kaydedilmeye devam eder.
 
 Gezgin, klasör başına en fazla **128 MP3/alt klasör**, tarama başına en fazla **512 dizin kaydı** ve **240 bayt** dosya yolu destekler. `.mp3` uzantısı büyük/küçük harfe duyarsız listelenir. M4A, WebM ve diğer yerel biçimler bu oynatıcının mevcut kapsamı dışındadır.
 
@@ -218,16 +218,16 @@ platformio.ini   Sabitlenmiş PlatformIO yapılandırması
 
 Ayrıntılı mühendislik notları ağırlıklı olarak Türkçedir:
 
-- [Dil desteği ve doğrulanan testler](design/LANGUAGES.md)
+- [Dil desteği](design/LANGUAGES.md)
 - [SD MP3 davranışı](design/SD-MUSIC.md)
 - [CSV istasyon listeleri](design/STATION-LISTS.md)
 - [Wi-Fi kurulumu](design/WIFI-SETUP.md)
 - [Ayarlar](design/SETTINGS.md)
 - [Web arayüzü](design/WEB-INTERFACE.md)
 - [Batarya planı — ertelenen donanım işi](design/BATTERY-POWER.md)
-- [Geliştirme geçmişi ve kalan işler](design/TODO.md)
+- [Yol haritası](design/TODO.md)
 
-Bazı notlar geçmiş sürümleri anlatır ve özel geliştirme araçlarına/yedeklerine atıf yapar. Bu araçlar normal PlatformIO derlemesi için gerekli değildir. Üretilmiş font kaynakları projededir; yeniden üretim notları [design/fonts](design/fonts) altındadır.
+Üretilmiş font kaynakları projededir; yeniden üretim notları [design/fonts](design/fonts) altındadır.
 
 ## Katkı sahipleri ve lisans
 

@@ -30,10 +30,6 @@ the value into its display state; it never draws from the header parser.
 No genre is inferred from the station name or URL. The actual codec is read by
 the application with `getCodec()`, not guessed from a stream URL extension.
 
-The backup location is recorded in display-test/http-recovery-backup-path.txt
-at the project root. It contains the complete original audio source and radio
-files; the main.cpp backup contains Wi-Fi credentials and must remain private.
-
 ## MP3 duration precision (radio 0.8.1)
 
 For MP3 only, calculate duration as `(uint64_t(audioDataSize) * 8) / averageBitrate`.
@@ -48,7 +44,7 @@ library's average bitrate estimate; exact container-index duration is not added.
 The 2 KiB local MP3 read cap and additional post-render audio servicing did not
 resolve the reported interruption. Both were reverted in 0.8.3. Local input
 reads use the original 16 KiB limit again. The application now shows static,
-ellipsized MP3 titles at the user's request. The 0.8.1 duration fix remains.
+ellipsized MP3 titles to preserve audio continuity. The 0.8.1 duration fix remains.
 
 
 ## Local MP3 seek and resume (radio 0.9.0)
@@ -69,4 +65,3 @@ ellipsized MP3 titles at the user's request. The 0.8.1 duration fix remains.
   VBR duration and time-based seeking remain estimates.
 
 No decoder/library upgrade, SD write, or 16 KiB read-size change was made.
-Firmware compilation and hardware checks are performed by the user.

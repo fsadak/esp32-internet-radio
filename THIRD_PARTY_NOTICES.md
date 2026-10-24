@@ -36,9 +36,8 @@ An alternative applicable grant or an explanation of the exact decoder licensing
 chain has not been verified for the vendored 2.0.7 files. Their parent directory's
 GPLv3 label alone has not been treated as resolving that issue.
 Clarification was requested in [upstream issue #23](https://github.com/esphome/ESP32-audioI2S/issues/23).
-On 2026-10-24 the maintainer chose to proceed with publication preparation while
-retaining this unresolved licensing question. That decision is not an additional
-grant from the decoder rights holders or a declaration of licensing clearance.
+The open issue does not establish an additional grant from decoder rights
+holders or a declaration of licensing clearance.
 
 ### FLAC / Project Nayuki
 
