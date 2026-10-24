@@ -1,0 +1,1 @@
+﻿CSV dosyalarını SD kartın kök dizinine kopyalayın. İlk seçenek: 01_tr_secme_32.csv. Her dosya en fazla 32 istasyon içerir. Cihazda dosyayı seçip onaylamak mevcut listenin tamamını değiştirir; dosyalar birleştirilmez. Kontroller bilgisayarda kısa ses örnekleriyle yapıldı; tüm yayınlar ESP32’de denenmedi.

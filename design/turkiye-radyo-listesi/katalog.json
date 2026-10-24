@@ -1,0 +1,2237 @@
+{
+  "prepared_at": "2026-10-20T04:10:37.292701+03:00",
+  "station_count": 222,
+  "direct_count": 190,
+  "hls_count": 32,
+  "stations": [
+    {
+      "name": "Slow Türk",
+      "url": "https://radyo.duhnet.tv/ak_dtvh_slowturk",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:40.848029+03:00",
+      "source": "https://www.radio-browser.info/history/97f3bb39-24a0-461d-b282-b0ccae5a12c4",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo 7",
+      "url": "http://46.20.3.250/;stream",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:40.849028+03:00",
+      "source": "https://www.radio-browser.info/history/df369586-40fc-11e9-aa55-52543be04c81",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": true,
+      "device_result": "User confirmed playback on firmware 0.4.0",
+      "selected_32_index": 1
+    },
+    {
+      "name": "Süper FM",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/SUPER_FM_SC",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:40.850028+03:00",
+      "source": "https://www.radio-browser.info/history/706def0c-7017-4601-8305-db1cdb2e9420",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": true,
+      "device_result": "User confirmed playback on firmware 0.4.0",
+      "selected_32_index": 2
+    },
+    {
+      "name": "Radyo Fenomen",
+      "url": "https://live.radyofenomen.com/fenomen/128/icecast.audio",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:40.850028+03:00",
+      "source": "https://www.radio-browser.info/history/b3e6320b-0ffc-4d4e-a999-2467897b17e6",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "JoyTürk",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK_SC",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:40.850028+03:00",
+      "source": "https://www.radio-browser.info/history/2a372113-4b74-41aa-a1e8-3dcb5d66de61",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo 45'lik",
+      "url": "https://stream.radyo45lik.com:4545/",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:40.851031+03:00",
+      "source": "https://www.radio-browser.info/history/585600d9-bdc4-4a2e-93c5-2421041cc55c",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Alem FM",
+      "url": "https://turkmedya.radyotvonline.net/alemfmaac",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:41.122905+03:00",
+      "source": "https://www.radio-browser.info/history/a96f83d1-d225-4eda-91cd-1a99dc230032",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Pal Station",
+      "url": "http://shoutcast.radyogrup.com:1020/",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:41.185663+03:00",
+      "source": "https://www.radio-browser.info/history/0edc51ea-fc6b-4ab8-a687-8dde4730007b",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kalp FM",
+      "url": "https://yayin.kalpfm.com:8080/",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:41.275809+03:00",
+      "source": "https://www.radio-browser.info/history/fc04c24b-1a01-4ec6-b7d3-64eba89e075f",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Show Radyo",
+      "url": "http://showradyo.radyotvonline.net/showradyoaac/",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:41.372441+03:00",
+      "source": "https://www.radio-browser.info/history/7f1ef327-ff1c-4027-b679-59e5cf2739c6",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT FM",
+      "url": "https://trt.radyotvonline.net/trtfm",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:41.543649+03:00",
+      "source": "https://www.radio-browser.info/history/0a2c3506-a136-40f2-b008-38daf2b12fd6",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": true,
+      "device_result": "User confirmed playback on firmware 0.4.0",
+      "selected_32_index": 4
+    },
+    {
+      "name": "Baba Radyo",
+      "url": "http://officialbabaradyo.radyotvonline.net/babaofficial",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:42.436967+03:00",
+      "source": "https://www.radio-browser.info/history/9a7f14e6-2826-47e4-8008-d54af25cf0d8",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Alaturka",
+      "url": "https://yayin.jumboserver.net:9100/stream",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:42.521480+03:00",
+      "source": "https://www.radio-browser.info/history/3dfe8d72-9ba4-47f2-9f57-a16cd5b273df",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "FG 93.8",
+      "url": "https://edge1.radyotvonline.net/shoutcast/play/fg",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:42.623884+03:00",
+      "source": "https://www.radio-browser.info/history/f0be7682-2aab-45b6-b66a-d4380897a6bc",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Virgin Radio Türkiye",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/VIRGIN_RADIO_ITUNES.mp3",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:42.810995+03:00",
+      "source": "https://www.radio-browser.info/history/82c18698-9cf7-4bf3-a737-998a47b02407",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radio Mydonose",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_MYDONOSE128AAC.aac",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:42.835993+03:00",
+      "source": "https://www.radio-browser.info/history/926a0629-3096-4755-a3b3-031e78bef5c1",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Voyage",
+      "url": "http://voyagewmp.radyotvonline.com/;",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:42.928460+03:00",
+      "source": "https://www.radio-browser.info/history/fa9d480d-3db9-49c6-a801-c0f5301b9072",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo ODTÜ",
+      "url": "http://stream.radyoodtu.com.tr/;",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:43.043575+03:00",
+      "source": "https://www.radio-browser.info/history/7ccb7f82-7dd6-11e8-b68b-52543be04c81",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Eksen",
+      "url": "http://eksenwmp.radyotvonline.com/;stream.mp3",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:43.052622+03:00",
+      "source": "https://www.radio-browser.info/history/961fbfc8-0601-11e8-ae97-52543be04c81",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Max FM",
+      "url": "http://live.radyotvonline.com:8090/;",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:43.403914+03:00",
+      "source": "https://www.radio-browser.info/history/b1443978-7de0-11e8-b68b-52543be04c81",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Borusan Klasik",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/BORUSAN_KLASIKAAC_SC",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:43.603243+03:00",
+      "source": "https://www.radio-browser.info/history/ccfd28c8-9f0a-11e9-a787-52543be04c81",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "JoyTürk Akustik",
+      "url": "http://playerservices.streamtheworld.com/api/livestream-redirect/JOYTURK_AKUSTIK128AAC.aac",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:44.023218+03:00",
+      "source": "https://www.radio-browser.info/history/a7dc38d4-920a-4de2-8fac-5106abccf69e",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Slow Time",
+      "url": "http://46.20.7.103:8040/;",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:53.243705+03:00",
+      "source": "https://www.radio-browser.info/history/3bc2e65e-76da-4b32-89f6-0fde42ec19c0",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk Slow",
+      "url": "https://listen.powerapp.com.tr/powerturkslow/mpeg/icecast.audio",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:44.196570+03:00",
+      "source": "https://www.radio-browser.info/history/e2091ce6-2152-4fea-ac8b-45b19adda1c7",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Küpe FM",
+      "url": "https://icecast.netmedya.net/kupefm",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:44.351578+03:00",
+      "source": "https://www.radio-browser.info/history/c745e25e-0af7-431b-a0c2-ee20bd695893",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Metro FM",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/METRO_FMAAC_SC",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:44.374592+03:00",
+      "source": "https://www.radio-browser.info/history/434b73f8-2fc5-40e5-af3c-254b6d603d08",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Pop 90",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/POP90128AAC.aac",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:44.460017+03:00",
+      "source": "https://www.radio-browser.info/history/75c5ca67-d613-4a9f-8bcf-eb69473153f9",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Efkar",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/EFKAR.mp3",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:44.581756+03:00",
+      "source": "https://www.radio-browser.info/history/5159b1df-7f85-4b67-a08d-953431d11c27",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Mydonose Türk",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/MYDONOSE_TURK128AAC.aac",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:44.845380+03:00",
+      "source": "https://www.radio-browser.info/history/7ee088e7-375f-4f1f-bd60-55a3606e9d3f",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Viva",
+      "url": "https://edge1.radyotvonline.net/shoutcast/play/radyoviva",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:45.966633+03:00",
+      "source": "https://www.radio-browser.info/history/989cc154-83bc-4f61-9b42-2ecb3b3739ed",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kıyı Müzik",
+      "url": "https://kiyi.radioca.st/stream",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:46.142667+03:00",
+      "source": "https://www.radio-browser.info/history/0377dd73-ac4e-4ab4-88ae-ac81c70676be",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Retro Türk",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/RETROTURKAAC_SC",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:46.171667+03:00",
+      "source": "https://www.radio-browser.info/history/24a3740f-4a8e-46e5-8b39-c8b4a2730ded",
+      "list_file": "sd-listeleri/02_tr_pop_slow_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Dream Türk",
+      "url": "https://radyo.duhnet.tv/dreamturk",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:46.720314+03:00",
+      "source": "https://www.radio-browser.info/history/eea9a230-f288-4312-834e-ac3914f533ca",
+      "list_file": "sd-listeleri/02_tr_pop_slow_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo D",
+      "url": "https://radyo.duhnet.tv/radyod",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:47.167401+03:00",
+      "source": "https://www.radio-browser.info/history/e5e4f77a-3821-45b3-9d59-14f5d8b83ab4",
+      "list_file": "sd-listeleri/02_tr_pop_slow_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Arabesk FM",
+      "url": "http://yayin.arabeskfm.biz:8042/",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:47.453057+03:00",
+      "source": "https://www.radio-browser.info/history/96201b3d-0601-11e8-ae97-52543be04c81",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "DamarTürk FM",
+      "url": "https://live.radyositesihazir.com:10997/",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:47.557645+03:00",
+      "source": "https://www.radio-browser.info/history/f3dfbec0-8ddb-457c-94cd-368631337c0f",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Türkülerle Türkiye",
+      "url": "http://37.247.98.8/stream/22/;",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:47.654679+03:00",
+      "source": "https://www.radio-browser.info/history/360028f5-46ba-11ea-a860-52543be04c81",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Ankara Havaları",
+      "url": "http://37.247.98.8/stream/30/;",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:47.753682+03:00",
+      "source": "https://www.radio-browser.info/history/8c01f241-6fe8-42b1-afd3-d6abf90ec78e",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Şiran",
+      "url": "https://live.radyositesihazir.com/8078/stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:48.010085+03:00",
+      "source": "https://www.radio-browser.info/history/1e0dcee9-bfb6-41a4-8356-e8c4540dfcf0",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Seymen",
+      "url": "https://yayin.radyoseymen.com.tr:1070/stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:48.099955+03:00",
+      "source": "https://www.radio-browser.info/history/de28a78a-6cee-453d-b9df-13557334dfdb",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Altın Şarkılar",
+      "url": "http://37.247.98.8/stream/25/;",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:48.159856+03:00",
+      "source": "https://www.radio-browser.info/history/31da019f-9f0a-11e9-a787-52543be04c81",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Türkü Radyo (turkuradyo.net)",
+      "url": "http://radyo.turkuradyo.net:4591/turkuradyo",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:48.418451+03:00",
+      "source": "https://www.radio-browser.info/history/8b4be047-aeac-4ccf-8eb5-35bc2f9740df",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Ekin",
+      "url": "http://yayin.turkhosted.com:6006/",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:48.841912+03:00",
+      "source": "https://www.radio-browser.info/history/9aab2dd5-ec19-469a-a048-e3f7c63f8585",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Türkü Radyo (turkuradyo.info)",
+      "url": "https://eu8.fastcast4u.com/proxy/ugur4129?mp=/1",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:49.047336+03:00",
+      "source": "https://www.radio-browser.info/history/ead1ae8e-10ae-4f90-9b83-d6ab9b40830f",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Dost Radyo",
+      "url": "http://yayin1.yayindakiler.com:3156/",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:49.115235+03:00",
+      "source": "https://www.radio-browser.info/history/9626456e-0601-11e8-ae97-52543be04c81",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Halk Radyo",
+      "url": "https://anadolu.liderhost.com.tr:10876/;",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:49.242772+03:00",
+      "source": "https://www.radio-browser.info/history/7ab25d55-40ef-4dcc-8e85-1dd99650d830",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Park FM",
+      "url": "http://yayin.netradyom.com:8050/PARKFM/",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:49.299383+03:00",
+      "source": "https://www.radio-browser.info/history/2871e14f-254c-4b0a-b506-c59bc6175e43",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Hatay Tempo FM",
+      "url": "https://sslyayin.netyayin.net:1215/stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:49.461370+03:00",
+      "source": "https://www.radio-browser.info/history/0730a3ce-73e4-4f39-b60c-ffeaa6ee1f1b",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Pir Yolu",
+      "url": "http://radyopiryolu.canliyayinda.com:8165/",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:49.496023+03:00",
+      "source": "https://www.radio-browser.info/history/4533a6a3-0b8e-476b-b0ec-b4a56162caa6",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Türkü",
+      "url": "https://yayin.radyomadyo.com:8008/stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:49.537070+03:00",
+      "source": "https://www.radio-browser.info/history/90fd1210-34f4-46a7-92bc-7f1ba7634460",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Pal Doğa",
+      "url": "http://shoutcast.radyogrup.com:1040/;*.mp3",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:49.621406+03:00",
+      "source": "https://www.radio-browser.info/history/0da692ab-2ee2-45e6-8303-26ff30949f91",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Gönül Mısraları",
+      "url": "https://radyo.gonulmisralari.com/listen/canli/radio.mp3",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:49.743104+03:00",
+      "source": "https://www.radio-browser.info/history/f6516fa9-1e5b-4bc6-a196-35f8dd745496",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kıyı Türkçe",
+      "url": "https://kiyiturk.radioca.st/stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:49.764115+03:00",
+      "source": "https://www.radio-browser.info/history/c0f5e413-4c6a-4146-90d9-774ef452ee4b",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Banko",
+      "url": "http://yayin.netradyom.com:9910/RADYOBANKO",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:49.826434+03:00",
+      "source": "https://www.radio-browser.info/history/306970f9-8063-481d-9f6b-00b99833d206",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Mastika FM",
+      "url": "https://mastika1.80.yayin.com.tr/",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:49.904579+03:00",
+      "source": "https://www.radio-browser.info/history/d6d307f6-038b-4b88-b70c-753004b3adcb",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Sızır FM",
+      "url": "http://stream.radiojar.com/tamm1f7kk48uv",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.204066+03:00",
+      "source": "https://www.radio-browser.info/history/37ba98b1-f055-4363-893a-b0efe305f6a4",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Hayatmix Arabesk",
+      "url": "https://radyo.yayin.com.tr:4078/mp3",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.259288+03:00",
+      "source": "https://www.radio-browser.info/history/a1cd74f5-1f8b-4fff-aab5-f0cbbddd2b77",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Musiki",
+      "url": "https://dijimedya.radyotvonline.net/radyomusiki",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:50.481165+03:00",
+      "source": "https://www.radio-browser.info/history/ab7e542e-9cbe-4ad1-aea6-2aa31f1b3457",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Yaren FM",
+      "url": "https://yarenfmn.80.yayin.com.tr//stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.539417+03:00",
+      "source": "https://www.radio-browser.info/history/1cc2e54d-0843-4606-b86c-5947908b27b0",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Tüm Zamanların En İyileri",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/GHOAT_TR128AAC.aac",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:50.677918+03:00",
+      "source": "https://www.radio-browser.info/history/811d9ec1-4b69-4759-8af6-682f5161eada",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kiss Gold Türk",
+      "url": "https://dijimedya.radyotvonline.net/goldturk",
+      "category": "halk_arabesk_ozgun",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:50.717833+03:00",
+      "source": "https://www.radio-browser.info/history/eadab7bc-b6d4-489b-a349-e6168fa78002",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kalbe Dokunan Şarkılar",
+      "url": "https://live.sinirsizhost.com.tr/8058/stream",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.768568+03:00",
+      "source": "https://www.radio-browser.info/history/51d0f041-acdf-44ab-aa2d-a2056aa3c640",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Yön Radyo",
+      "url": "https://stream.radyolarburada.com:8020/yonradyo",
+      "category": "halk_arabesk_ozgun",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.790499+03:00",
+      "source": "https://www.radio-browser.info/history/3fdf15a4-685f-422c-bfee-49af64f5dbd1",
+      "list_file": "sd-listeleri/03_tr_turku_arabesk.csv",
+      "device_tested": false
+    },
+    {
+      "name": "dinamo.fm sleep",
+      "url": "http://channels.dinamo.fm/sleep-mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.894741+03:00",
+      "source": "https://www.radio-browser.info/history/04407d31-2cc0-11e8-91bf-52543be04c81",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "dinamo.fm deep",
+      "url": "http://channels.dinamo.fm/deep-mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:50.928909+03:00",
+      "source": "https://www.radio-browser.info/history/fd92e72f-2cbe-11e8-91bf-52543be04c81",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "dinamo.fm caffe",
+      "url": "http://channels.dinamo.fm/caffe-mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.221088+03:00",
+      "source": "https://www.radio-browser.info/history/2815bbc7-2cbf-11e8-91bf-52543be04c81",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "dinamo.fm discotheque",
+      "url": "http://channels.dinamo.fm/discotheque-mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.230052+03:00",
+      "source": "https://www.radio-browser.info/history/8c76958a-2cbf-11e8-91bf-52543be04c81",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Türk Rock FM",
+      "url": "https://yayin5.radyohizmeti.com/8090/stream;",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.253138+03:00",
+      "source": "https://www.radio-browser.info/history/c8d41d0e-0437-485c-a62c-ae95ecfdae40",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Mayday Records",
+      "url": "https://stream.maydayrecords.net/radio/8000/maydayrecords.mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.287412+03:00",
+      "source": "https://www.radio-browser.info/history/60f46e8b-c57f-4ef0-8aea-be92dddfca43",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "JoyTürk Rock",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/JOYTURK_ROCK_SC",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.461181+03:00",
+      "source": "https://www.radio-browser.info/history/354ffe25-8a45-4534-888b-c900054c1ba7",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Fenomen Clubbin",
+      "url": "https://live.radyofenomen.com/fenomenclubbin/128/icecast.audio",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:51.486182+03:00",
+      "source": "https://www.radio-browser.info/history/6f3d3422-9998-4079-8e1a-7d23cef150ea",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "X Radio",
+      "url": "https://stream.xradio.com.tr:8770/stream",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:51.648364+03:00",
+      "source": "https://www.radio-browser.info/history/f21b4940-2b6e-4436-b30f-fe16ce46f15a",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "dinamo.fm fluent",
+      "url": "http://channels.dinamo.fm/fluent-mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.739082+03:00",
+      "source": "https://www.radio-browser.info/history/45bb5fc8-84df-4561-b282-935bb5dd7c86",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "İTÜ Rock",
+      "url": "http://160.75.86.29:8095/",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:53.427378+03:00",
+      "source": "https://www.radio-browser.info/history/39e9fafe-85ca-422b-b448-20f47c67c47c",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Loops Radio Progressive",
+      "url": "https://progressive.ozelip.com/7670/stream",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.893321+03:00",
+      "source": "https://www.radio-browser.info/history/d5fb7ff2-4b30-4f0f-a66f-c44a480337ec",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kıyı Caz",
+      "url": "http://caz.radioca.st/",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:51.971119+03:00",
+      "source": "https://www.radio-browser.info/history/131f6fc8-1e32-49ab-9a4f-d556db5c7f3e",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo ODTÜ Rock",
+      "url": "http://stream.radyoodtu.com.tr/rock",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:52.096350+03:00",
+      "source": "https://www.radio-browser.info/history/aec438e2-74b3-11ea-b1cf-52543be04c81",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo ODTÜ Easy",
+      "url": "https://stream3.radyoodtu.com.tr:8000/easy",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:52.200788+03:00",
+      "source": "https://www.radio-browser.info/history/e15a3233-3781-4056-831e-c07dd5fc60be",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Black Love",
+      "url": "https://anadolu.liderhost.com.tr:10964/",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:52.316083+03:00",
+      "source": "https://www.radio-browser.info/history/cad85f62-a486-4b1c-b90d-9a3a5956330b",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "World Hits",
+      "url": "http://37.247.98.8/stream/34/",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:52.409492+03:00",
+      "source": "https://www.radio-browser.info/history/694b1013-4537-47b0-9ad9-93b8f63893e2",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Find a Cutie",
+      "url": "https://stream.zeno.fm/lyl2uv7fcvovv",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:52.560438+03:00",
+      "source": "https://www.radio-browser.info/history/f91c177e-7f45-4156-9699-d745993c6831",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "dinamo.fm Minimüzikhol",
+      "url": "http://channels.dinamo.fm/mmradyo-mp3",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:52.691273+03:00",
+      "source": "https://www.radio-browser.info/history/127006d6-f378-42d0-97b6-1c253a2f3d3e",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Loops Radio Elektronica Station",
+      "url": "https://ssl22.radyotelekom.com/8232/stream",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:52.723609+03:00",
+      "source": "https://www.radio-browser.info/history/5729f872-934d-4e28-856e-6b7ae1808863",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "RadioTEDU Jazz",
+      "url": "https://stream.radiotedu.com/cazz",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:52.766416+03:00",
+      "source": "https://www.radio-browser.info/history/596f41f5-3665-448d-a8f1-75dd5012cd3f",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "RadioTEDU Lo-Fi",
+      "url": "https://stream.radiotedu.com/lofi",
+      "category": "yabanci_alternatif_caz",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:53.030407+03:00",
+      "source": "https://www.radio-browser.info/history/e8aebee3-aeb9-4d6c-afea-a830bd006cac",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Loops Radio Techno",
+      "url": "https://ip179.ozelip.com/7688//asistan/stream/",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:53.084593+03:00",
+      "source": "https://www.radio-browser.info/history/b4c64aa8-9bf1-4015-bc8d-7e10ff1edce9",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radio Glamorize",
+      "url": "https://live.radioglamorize.com/stream1",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:53.173267+03:00",
+      "source": "https://www.radio-browser.info/history/25fba87c-ddc8-409a-8474-4ffbac809c59",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Mix A Mix FM",
+      "url": "https://radyo.yayin.com.tr:5998/stream/1/?icy=http",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:53.254903+03:00",
+      "source": "https://www.radio-browser.info/history/a42161db-0b63-4c66-8980-51208450d8dc",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Dance",
+      "url": "https://listen.powerapp.com.tr/powerdance/mpeg/icecast.audio",
+      "category": "yabanci_alternatif_caz",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:53.426860+03:00",
+      "source": "https://www.radio-browser.info/history/bf106bfa-4b34-4b50-9955-f7a36d76c0da",
+      "list_file": "sd-listeleri/04_tr_alternatif_caz.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Habertürk Radyo",
+      "url": "https://haberturkradyo.radyotvonline.net/haberturkradyo",
+      "category": "haber_spor_sohbet",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:53.602557+03:00",
+      "source": "https://www.radio-browser.info/history/14db05f4-b028-40dc-a13f-c53d068d929e",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Sputnik",
+      "url": "https://icecast-rian.cdnvideo.ru/voicestm",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:53.671677+03:00",
+      "source": "https://www.radio-browser.info/history/0e545fd4-cbd9-4836-81d2-e183bb02da79",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Radyo 1",
+      "url": "https://trt.radyotvonline.net/trt1",
+      "category": "haber_spor_sohbet",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:53.895275+03:00",
+      "source": "https://www.radio-browser.info/history/c1e2e152-71d0-458f-9c41-5fb54a33dbf8",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Spor",
+      "url": "http://46.20.4.5:8170/",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:53.709610+03:00",
+      "source": "https://www.radio-browser.info/history/960e5bb2-0601-11e8-ae97-52543be04c81",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": true,
+      "device_result": "User confirmed playback on firmware 0.4.0",
+      "selected_32_index": 32
+    },
+    {
+      "name": "TRT Radyo Haber",
+      "url": "https://trt.radyotvonline.net/trthaber",
+      "category": "haber_spor_sohbet",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:54.120799+03:00",
+      "source": "https://www.radio-browser.info/history/9ed85a92-9fb4-4ae8-baca-59347adc782c",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TGRT FM",
+      "url": "https://icecasttgrt.ihlasdigitalassets.com/tgrtfm",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:54.154816+03:00",
+      "source": "https://www.radio-browser.info/history/ff3b8372-1f59-4b18-a4fc-2240b8ab5417",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Trafik Ankara",
+      "url": "http://live2.radyotvonline.com:8000/",
+      "category": "haber_spor_sohbet",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:53.889456+03:00",
+      "source": "https://www.radio-browser.info/history/960e285b-0601-11e8-ae97-52543be04c81",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "NTV Radyo",
+      "url": "http://ntvrdwmp.radyotvonline.com/",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:54.286904+03:00",
+      "source": "https://www.radio-browser.info/history/ad09398c-3f3d-4311-9344-c76395e46805",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Meteorolojinin Sesi",
+      "url": "http://radyomgm.canliyayinda.com/;stream.mp3",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:54.448829+03:00",
+      "source": "https://www.radio-browser.info/history/3acd808a-e801-43bb-bdb3-16a8f4761f0d",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "CGTN Türk Radyo",
+      "url": "https://criturk.radyotvonline.net/",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:54.664530+03:00",
+      "source": "https://www.radio-browser.info/history/ea534546-de6e-4d08-b4bf-447a1cbeee56",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Gol",
+      "url": "https://edge1.radyotvonline.net/shoutcast/play/radyogol",
+      "category": "haber_spor_sohbet",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:54.715146+03:00",
+      "source": "https://www.radio-browser.info/history/87c44288-3030-4e9f-b5af-62fc254fa3f9",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Apaçık Radyo",
+      "url": "http://stream.34bit.net/ar.aac",
+      "category": "haber_spor_sohbet",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:54.806922+03:00",
+      "source": "https://www.radio-browser.info/history/ce26d234-1413-4a97-8f7d-5a476bacf104",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "24 Radyo",
+      "url": "https://radyo24.radyotvonline.net/radyo24",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:54.902773+03:00",
+      "source": "https://www.radio-browser.info/history/21df519d-9c3f-47e5-a8e1-32a80901398f",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Trafik İstanbul",
+      "url": "http://37.247.100.118/stream/157/",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.043476+03:00",
+      "source": "https://www.radio-browser.info/history/32c900dc-1027-486b-8397-efd57ad5c2fb",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Lig Radyo",
+      "url": "https://ligradyo.radyotvonline.net/ligradyo",
+      "category": "haber_spor_sohbet",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.087053+03:00",
+      "source": "https://www.radio-browser.info/history/55fe98c9-1ae8-4fd7-8d30-443ff052b3f0",
+      "list_file": "sd-listeleri/05_tr_haber_spor.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Gözyaşı FM",
+      "url": "http://yayin1.canliyayin.org:8700/;*.mp3",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.210269+03:00",
+      "source": "https://www.radio-browser.info/history/775bea1d-8c92-11e9-ad01-52543be04c81",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kur'an ve Türkçe Meal",
+      "url": "http://82.145.41.8:19175/",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:54.117633+03:00",
+      "source": "https://www.radio-browser.info/history/c0aa78c7-8461-4c36-a85a-b651f2f5fa39",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Her An Kur'an",
+      "url": "https://radio.mihr.com/radio/8050/radio.mp3",
+      "category": "dini_tematik",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:55.443776+03:00",
+      "source": "https://www.radio-browser.info/history/70378409-2e51-403e-b7cd-20b8624fbea7",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Fıtrat",
+      "url": "http://radyofitrat.radyotvonline.net/",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.495355+03:00",
+      "source": "https://www.radio-browser.info/history/7ea58b1d-e502-4e03-abb1-65b2408bab2d",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Bayram FM",
+      "url": "https://sslyayin.netyayin.net/3442/stream/;stream.mp3",
+      "category": "dini_tematik",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:55.540824+03:00",
+      "source": "https://www.radio-browser.info/history/cc9c0c3a-bcc7-4e54-9456-5cb125cf8f93",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Erkam Radyo",
+      "url": "https://api-tv5.yayin.com.tr:8002/mp3",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.560825+03:00",
+      "source": "https://www.radio-browser.info/history/cef30f27-1f96-4005-8b7c-e161dba43ccf",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Hakkın Sesi",
+      "url": "https://radio.mihr.com/radio/8010/hakkinsesi",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.582827+03:00",
+      "source": "https://www.radio-browser.info/history/9a83c49d-d17e-4fec-ba64-3db850788da4",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Şafak Radyo",
+      "url": "http://safakradyo.com:2626/;",
+      "category": "dini_tematik",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:54.386333+03:00",
+      "source": "https://www.radio-browser.info/history/d9eb277b-f0d6-4c02-aeaa-273521944bec",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "İhya FM",
+      "url": "https://radyo.yayin.com.tr:2727/stream",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.721933+03:00",
+      "source": "https://www.radio-browser.info/history/caff715e-7b52-436d-be35-80e39906b2dd",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Miraç FM",
+      "url": "https://anadolu.liderhost.com.tr:9416/stream",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:55.770060+03:00",
+      "source": "https://www.radio-browser.info/history/288483da-41bd-466a-8282-d3f5dcc4c2d0",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Nur Radyo",
+      "url": "https://canli.hidayetradyolari.com/listen/radyo_nur/radio.mp3",
+      "category": "dini_tematik",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:55.923460+03:00",
+      "source": "https://www.radio-browser.info/history/d9dc8607-d88d-48f2-bde0-1dc98c901f68",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Nida",
+      "url": "https://anadolu.liderhost.com.tr/8106/stream",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.018476+03:00",
+      "source": "https://www.radio-browser.info/history/1020f3df-3507-476a-85ca-152e03cb75ff",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Konya İsra FM",
+      "url": "https://yayin2.canliyayin.org:8210/;stream",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.039979+03:00",
+      "source": "https://www.radio-browser.info/history/2e728efe-5d69-410b-a5d2-e987ca66c09f",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Lalegül FM",
+      "url": "https://icecast.netmedya.net/lalegulfm",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.081159+03:00",
+      "source": "https://www.radio-browser.info/history/d6a8ae1d-75fc-490f-a9fe-4fcaacaf9ba6",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Karadut FM",
+      "url": "https://yayin5.radyohizmeti.com/9982/stream",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.122239+03:00",
+      "source": "https://www.radio-browser.info/history/869d6802-36b4-487f-900a-3b26cd9e5ee1",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Gül",
+      "url": "http://yayin2.canliyayin.org:8866/;*.mp3",
+      "category": "dini_tematik",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.150730+03:00",
+      "source": "https://www.radio-browser.info/history/70d5625c-8c8e-11e9-ad01-52543be04c81",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Bizim İller Radyo",
+      "url": "http://yayin.yayindakiler.com:4078/;",
+      "category": "dini_tematik",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:56.384030+03:00",
+      "source": "https://www.radio-browser.info/history/8ec988d7-1eff-41d9-828a-fd53fc15eeb0",
+      "list_file": "sd-listeleri/06_tr_dini.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo 35",
+      "url": "https://yayin.turkhosted.com/6012/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:56.405036+03:00",
+      "source": "https://www.radio-browser.info/history/fcbf07d8-d3b3-4d9f-839a-3cfea3391b35",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radio 44",
+      "url": "https://radyo44.80.yayin.com.tr/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.644654+03:00",
+      "source": "https://www.radio-browser.info/history/57d6c252-a148-4e96-9602-39f3d6f22eb1",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Akdeniz",
+      "url": "https://yayin.radyoakdeniz.com/9470/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:56.667659+03:00",
+      "source": "https://www.radio-browser.info/history/14797ffb-2fdd-4a54-9748-e96486914dd2",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Deva Adana",
+      "url": "http://yayin.yayindakiler.com:3040/;stream.mp3",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:56.756773+03:00",
+      "source": "https://www.radio-browser.info/history/d8eac60e-47e4-4051-914c-24dc63b02c32",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Sarıkamış",
+      "url": "https://live.radyositesihazir.com:8004/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.760524+03:00",
+      "source": "https://www.radio-browser.info/history/1c8bd5a0-3cd3-4596-bb0a-47a777cbf0dd",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Aktif FM",
+      "url": "https://radyo.yayindakiler.com:3164/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:56.816221+03:00",
+      "source": "https://www.radio-browser.info/history/0767dea5-dd44-440a-b5bf-f4c58295ede4",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo 13",
+      "url": "https://radyo.yayindakiler.com:3050/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:56.972215+03:00",
+      "source": "https://www.radio-browser.info/history/1e84114e-ade9-4baf-9f85-89411162ccfe",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Köroğlu FM",
+      "url": "https://yayin.turkhosted.com:6068/stream?/;stream.mp3",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:56.999897+03:00",
+      "source": "https://www.radio-browser.info/history/1a1ade69-4796-4185-9793-ea9ca970ce02",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Tarsus FM",
+      "url": "https://tarsusfm.80.yayin.com.tr//stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:57.031392+03:00",
+      "source": "https://www.radio-browser.info/history/ea36dc14-cf97-4e57-b0e0-9b21a52344e6",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Koç",
+      "url": "https://stores.powerapp.com.tr/kocschool/mpeg/icecast.audio",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:57.166803+03:00",
+      "source": "https://www.radio-browser.info/history/fb984504-b551-4ef2-b919-45d2cc066e03",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Taksi",
+      "url": "https://live.radyo.in/8006/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:57.233508+03:00",
+      "source": "https://www.radio-browser.info/history/b5981132-7fdd-43cf-9433-eaa712b8ee21",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kent FM",
+      "url": "https://kentfm955.ozelip.com/9306/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:57.338091+03:00",
+      "source": "https://www.radio-browser.info/history/c21d3998-f91b-48e4-9bb1-74fa12ffb9e5",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Venüs",
+      "url": "https://stream2.rtvtakip.com:7005/;stream.mp3",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:57.407817+03:00",
+      "source": "https://www.radio-browser.info/history/cbd35624-d0ed-4676-b0c6-a18358987584",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radio Life Kayseri",
+      "url": "https://yayin2.canliyayin.org:10990/;*.mp3",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:57.407817+03:00",
+      "source": "https://www.radio-browser.info/history/26eb1f53-c037-43e8-8f92-3d90769f5972",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Trio",
+      "url": "https://radyotrio.radyotvonline.net/radyotrio",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:57.455716+03:00",
+      "source": "https://www.radio-browser.info/history/2484f562-2a83-4c6d-9f91-038644ceb11e",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Yıldız FM",
+      "url": "https://radyo.yayin.com.tr:5940/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:57.799049+03:00",
+      "source": "https://www.radio-browser.info/history/da574b9d-d86a-4cef-81a2-fde612759a0d",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Çınar FM",
+      "url": "https://sslyayin.netyayin.net:10992/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:57.878661+03:00",
+      "source": "https://www.radio-browser.info/history/cdd35eda-263b-4475-81d7-6696024e097e",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Merkez FM Samsun",
+      "url": "http://uydu.radyotvyayini.com:8016/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:57.983485+03:00",
+      "source": "https://www.radio-browser.info/history/8456989c-06fb-445c-b4d9-9a4e84d608be",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Mega Radyo İskenderun",
+      "url": "https://dinle.megaradyoiskenderun.com/8024/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:58.207684+03:00",
+      "source": "https://www.radio-browser.info/history/664c2489-5a16-4fb0-8aaf-8b8b5306aa9c",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Espiye FM",
+      "url": "https://anadolu.liderhost.com.tr/9028/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:58.229698+03:00",
+      "source": "https://www.radio-browser.info/history/fd632252-faa7-4ec3-8f58-f497fdef2110",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo 75",
+      "url": "https://anadolu.liderhost.com.tr/8126/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:58.265445+03:00",
+      "source": "https://www.radio-browser.info/history/d8ed6337-bc5c-4d37-80ec-efe75881796b",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Sinerji",
+      "url": "https://radio.guventechnology.com/9994/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:58.611492+03:00",
+      "source": "https://www.radio-browser.info/history/0dc34aa4-d185-413f-8c04-5763bf2ec653",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Boğaz FM",
+      "url": "https://radyo.yayin.com.tr:5938/",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:58.655671+03:00",
+      "source": "https://www.radio-browser.info/history/205d99bd-4e97-4373-a0d8-2658c0e75afe",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "İmbat FM",
+      "url": "https://radyo.medyahost.com.tr/8034/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:58.705087+03:00",
+      "source": "https://www.radio-browser.info/history/015ea1ab-f1dd-4f20-8dcb-edd95c3cca59",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "ERT FM Elazığ",
+      "url": "https://radyo.yayin.com.tr:8012/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:58.816700+03:00",
+      "source": "https://www.radio-browser.info/history/70c634dc-e5a5-44ed-98c7-538e073a3237",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Serhat FM 91.5",
+      "url": "http://yayin.serhatfm.com:9150/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.058784+03:00",
+      "source": "https://www.radio-browser.info/history/ddf94722-dd93-4fb5-ac19-ad42649a30e1",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Maksat",
+      "url": "https://live.sinirsizhost.com.tr/8038/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:59.105965+03:00",
+      "source": "https://www.radio-browser.info/history/f85ee60b-db9a-46ed-a403-d8755e159cfa",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "OMÜ Radyo",
+      "url": "https://omuradyo.ozelip.com/8042/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.179383+03:00",
+      "source": "https://www.radio-browser.info/history/da32fe6d-2c0d-4ffa-bf9d-b408e077417c",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Gelişim Radyo",
+      "url": "http://radyo.yayindakiler.com:4008/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.510423+03:00",
+      "source": "https://www.radio-browser.info/history/fa61e57b-cb22-4fcb-bdc9-57e1f1091605",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Romantik SES Sakarya",
+      "url": "https://radyo.romantikses.com/romantiksessakary/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.555758+03:00",
+      "source": "https://www.radio-browser.info/history/78003d37-6c68-4f8d-bb0f-9d5adbd0c9c1",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Bizim FM Şile",
+      "url": "https://stream.turkiyeradyolari.com/9300/stream?_t=1786859250066",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.576764+03:00",
+      "source": "https://www.radio-browser.info/history/4dc929fc-04c8-4c07-85df-4bbce06c89ab",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Ereğli FM",
+      "url": "http://radyo.yayindakiler.com:3000/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:59.662763+03:00",
+      "source": "https://www.radio-browser.info/history/1b6148c0-5582-418c-b836-0b7246064f55",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_1.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Seydişehir FM",
+      "url": "https://radyo.yayin.com.tr:4142/strem",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:59.688625+03:00",
+      "source": "https://www.radio-browser.info/history/5ddd5562-7813-417d-80ce-2b1a336a3512",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "BesteFM",
+      "url": "https://stream.zeno.fm/tnvnovtgozstv",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.709628+03:00",
+      "source": "https://www.radio-browser.info/history/54e94804-4a95-4b4a-ba92-eb4c44d98842",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Atılım",
+      "url": "https://listen.powerapp.com.tr/radyoatilim/mpeg/icecast.audio",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:03:59.881087+03:00",
+      "source": "https://www.radio-browser.info/history/0316f522-5a00-499c-bcf0-aceb9076f33c",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Elazığ Mavi Radyo",
+      "url": "https://yayin.turkhosted.com/6066/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:03:59.918219+03:00",
+      "source": "https://www.radio-browser.info/history/1fd7925e-09ac-42b3-b560-f4948fa8bfd1",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Star FM",
+      "url": "https://anadolu.liderhost.com.tr/9078/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:00.029718+03:00",
+      "source": "https://www.radio-browser.info/history/2a421ffc-d50e-43a1-8127-f931912fab17",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Yeniköy FM",
+      "url": "https://anadolu.liderhost.com.tr:10924/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:00.111972+03:00",
+      "source": "https://www.radio-browser.info/history/d4d626b7-5342-4a79-9d88-9d3620568e4a",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Can",
+      "url": "http://yayin2.yayindakiler.com:4174/;stream.mp3",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:00.275222+03:00",
+      "source": "https://www.radio-browser.info/history/0c12afb8-cc4d-4291-9d0f-5dbedc1690a8",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "BAU Radyo",
+      "url": "https://ssl120.radyotelekom.com.tr/8106/stream.mp4",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:00.278288+03:00",
+      "source": "https://www.radio-browser.info/history/5b3ce092-af80-46ac-8e07-c97f6cb09423",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kent Radyo Mersin",
+      "url": "https://anadolu.liderhost.com.tr:10906/",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:00.364379+03:00",
+      "source": "https://www.radio-browser.info/history/7ae6b7bf-8629-4024-a9a8-ce62099b3b7e",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo 16",
+      "url": "https://radyo.yayin.com.tr:6038/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:00.440631+03:00",
+      "source": "https://www.radio-browser.info/history/7db146b3-e03f-4d43-87bb-242b7a9dc81b",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Sevtek",
+      "url": "https://sevtekfm.ozelip.com/8020/stream",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:00.506323+03:00",
+      "source": "https://www.radio-browser.info/history/da88eba7-1d35-4cb1-bc9a-ede056504bfa",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Derya FM",
+      "url": "https://yayin.turkhosted.com:6032/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:00.543021+03:00",
+      "source": "https://www.radio-browser.info/history/ef7cf7f5-75de-4561-b7e3-fa8f04d4188a",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Hey Radyo",
+      "url": "https://usa4.fastcast4u.com/proxy/radyoizmirfm/",
+      "category": "yerel_universite",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:04:00.736299+03:00",
+      "source": "https://www.radio-browser.info/history/341e06c4-da16-475d-a013-ba296d52db13",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Hemdem Pop Radyo",
+      "url": "https://yayin.hemdemradyo.com/",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:04:00.857871+03:00",
+      "source": "https://www.radio-browser.info/history/2e4ee5d9-18ef-4073-8d6e-5582808216ff",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Joy FM",
+      "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FMAAC_SC",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:28.050265+03:00",
+      "source": "https://www.radio-browser.info/history/c7dadc87-3c43-46f5-aa24-91e0fa9a7643",
+      "list_file": "sd-listeleri/02_tr_pop_slow_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kiss Türk Slow",
+      "url": "http://dijimedya.radyotvonline.net/turkslow",
+      "category": "ulusal_pop_slow",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:28.051268+03:00",
+      "source": "https://www.radio-browser.info/history/40ad551a-86df-4c4b-91d5-22aee0b6d57a",
+      "list_file": "sd-listeleri/02_tr_pop_slow_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Armoni",
+      "url": "https://radyo.yayindakiler.com:4084/stream",
+      "category": "yerel_universite",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:28.380844+03:00",
+      "source": "https://www.radio-browser.info/history/4a070d1f-2f41-42dc-adac-c2282788ddec",
+      "list_file": "sd-listeleri/07_tr_yerel_universite_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Hayatmix Slow",
+      "url": "https://radyo.yayin.com.tr:4090/mp3",
+      "category": "ulusal_pop_slow",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:28.837884+03:00",
+      "source": "https://www.radio-browser.info/history/bef9a5a3-997a-42ed-a480-f0302253b7d5",
+      "list_file": "sd-listeleri/02_tr_pop_slow_2.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power FM",
+      "url": "https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:29.286541+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk",
+      "url": "https://listen.powerapp.com.tr/powerturk/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:29.461127+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Plus",
+      "url": "https://listen.powerapp.com.tr/powerplus/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:29.529141+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Pop",
+      "url": "https://listen.powerapp.com.tr/powerpop/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:29.551147+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Love",
+      "url": "https://listen.powerapp.com.tr/powerlove/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:29.622910+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Smooth",
+      "url": "https://listen.powerapp.com.tr/powersmooth/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:29.692159+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power XL",
+      "url": "https://listen.powerapp.com.tr/powerextralounge/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:29.732511+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Earth",
+      "url": "https://listen.powerapp.com.tr/powerearth/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:29.827607+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Deep",
+      "url": "https://listen.powerapp.com.tr/powerdeep/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:29.882303+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk Rap",
+      "url": "https://listen.powerapp.com.tr/powerturkrap/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:30.013839+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk Akustik",
+      "url": "https://listen.powerapp.com.tr/powerturkakustik/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:30.063956+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk Taptaze",
+      "url": "https://listen.powerapp.com.tr/powerturktaptaze/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:30.151363+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk Dans",
+      "url": "https://listen.powerapp.com.tr/powerturkdans/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:30.263478+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "PowerTürk Rock",
+      "url": "https://listen.powerapp.com.tr/powerturkrock/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:30.285482+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Greece",
+      "url": "https://listen.powerapp.com.tr/powergreece/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:30.432914+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power R&B Hip-Hop",
+      "url": "https://listen.powerapp.com.tr/powerrbhiphop/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:30.481955+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Salsa",
+      "url": "https://listen.powerapp.com.tr/powersalsa/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:30.572223+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Gold",
+      "url": "https://listen.powerapp.com.tr/powergold/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:30.630840+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Power Smooth Jazz",
+      "url": "https://listen.powerapp.com.tr/powersmoothjazz/mpeg/icecast.audio",
+      "category": "power_dogrudan",
+      "format": "MP3",
+      "checked_at": "2026-10-20T04:07:30.719219+03:00",
+      "source": "https://www.powerapp.com.tr/",
+      "list_file": "sd-listeleri/08_tr_power.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Radyo 3",
+      "url": "https://rd-trtradyo3.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:17.886416+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Nağme",
+      "url": "https://rd-trtnagme.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:17.887417+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Türkü",
+      "url": "https://rd-trtturku.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:17.887417+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Antalya",
+      "url": "https://radio-trtantalya.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:17.887417+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Çukurova",
+      "url": "https://radio-trtcukurova.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:18.357521+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT GAP Diyarbakır",
+      "url": "https://radio-trtgap.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:18.623100+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Erzurum",
+      "url": "https://radio-trterzurum.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:18.671058+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT Trabzon",
+      "url": "https://radio-trttrabzon.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:18.725900+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "TRT TSR",
+      "url": "https://radio-trttsr.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:19.393845+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Memleketim FM",
+      "url": "https://radio-trtmemleketimfm.medya.trt.com.tr/master.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:19.475287+03:00",
+      "source": "https://radyo.trt.net.tr/player.js?v=3.2.1",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kral FM",
+      "url": "https://dygedge2.radyotvonline.net/kralfm/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:19.497802+03:00",
+      "source": "https://www.kralmuzik.com.tr/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kral Pop",
+      "url": "https://dygedge.radyotvonline.net/kralpop/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:19.935994+03:00",
+      "source": "https://www.kralmuzik.com.tr/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Kafa Radyo",
+      "url": "https://moondigitalmaster.radyotvonline.net/kafaradyo/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:48.335202+03:00",
+      "source": "https://www.radio-browser.info/history/4dc09559-aa5c-4ecd-a8cf-4fc450471ae4",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Best FM",
+      "url": "https://ssldyg.radyotvonline.com/best/bestfm.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:20.218283+03:00",
+      "source": "https://www.bestfm.com.tr/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Number1 Türk",
+      "url": "https://ssldyg2.radyotvonline.com/live/numberoneturk.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:23.844651+03:00",
+      "source": "https://www.numberone.com.tr/2015/12/17/nr1-turk-fm-dinle-canli-radyo-dinle/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Number1 FM",
+      "url": "https://ssldyg2.radyotvonline.com/live/numberonefm.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:23.911006+03:00",
+      "source": "https://www.numberone.com.tr/2015/12/17/number1-fm-dinle-canli-radyo-dinle/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Best of Number1",
+      "url": "https://ssldyg2.radyotvonline.com/live/bestofyabanci.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:24.122691+03:00",
+      "source": "https://www.numberone.com.tr/2017/08/16/best-of-number1-canli-radyo-dinle/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Number1 Türk Damar",
+      "url": "https://ssldyg2.radyotvonline.com/live/damar.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:24.176414+03:00",
+      "source": "https://www.numberone.com.tr/2017/07/10/nr1-turk-damar-radyo-dinle/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Number1 Slow",
+      "url": "https://ssldyg2.radyotvonline.com/live/yabancislow.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:24.662138+03:00",
+      "source": "https://www.numberone.com.tr/2015/12/16/number1-slow-canli-radyo-dinle/",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Radyo Turkuvaz",
+      "url": "https://trkvz-radyolar.ercdn.net/radyoturkuvaz/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:24.813406+03:00",
+      "source": "https://www.radio-browser.info/history/7046d480-674a-415f-8736-395600b5c7fd",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "A Haber Radyo",
+      "url": "https://trkvz-radyolar.ercdn.net/ahaberradyo/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:24.863076+03:00",
+      "source": "https://www.radio-browser.info/history/862444ed-dcfb-4c23-b2ad-b85d5c8f91ba",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Pal FM",
+      "url": "https://ssl4.radyotvonline.com/radyohome/palfmhome.stream/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:25.343975+03:00",
+      "source": "https://www.radio-browser.info/history/f4121c74-9b1a-4051-8864-9db00eab2848",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Pal Nostalji",
+      "url": "https://moondigitaledge.radyotvonline.net/palnostalji/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:26.128308+03:00",
+      "source": "https://www.radio-browser.info/history/520bfe3e-2556-49f9-9846-e2c610978b60",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "A Spor Radyo",
+      "url": "https://trkvz-radyolar.ercdn.net/asporradyo/chunklist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:26.165705+03:00",
+      "source": "https://www.radio-browser.info/history/2ca9849a-ddde-411a-a79c-2a0ac728a4b9",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Turkuvaz Nostalji",
+      "url": "https://trkvz-radyolar.ercdn.net/turkuvaznostalji/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:26.451464+03:00",
+      "source": "https://www.radio-browser.info/history/f1466973-55d2-440f-9c08-e7e8a218962c",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Turkuvaz Anadolu",
+      "url": "http://trkvz-radyolar.ercdn.net/turkuvazanadolu/Playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:26.706550+03:00",
+      "source": "https://www.radio-browser.info/history/c83e6f0f-cfb3-48a1-9cb8-34d61645bd20",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Turkuvaz Musiki",
+      "url": "https://trkvz-radyolar.ercdn.net/turkuvazmusiki/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:26.773992+03:00",
+      "source": "https://www.radio-browser.info/history/3cb7e617-ead1-4a88-9239-802050b33a13",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Turkuvaz Romantik",
+      "url": "https://trkvz-radyolar.ercdn.net/turkuvazromantik/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:27.191273+03:00",
+      "source": "https://www.radio-browser.info/history/daec7fd1-956d-4291-bd83-05aa4cdd409a",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Turkuvaz Efsane",
+      "url": "https://trkvz-radyolar.ercdn.net/turkuvazefsane/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:27.349512+03:00",
+      "source": "https://www.radio-browser.info/history/a0e31faa-d78e-439e-ae23-9e937b4848e4",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Diyanet Radyo",
+      "url": "https://eustr73.mediatriple.net/videoonlylive/mtikoimxnztxlive/broadcast_5e3c1171d7d2a.smil/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / MPEG-TS",
+      "checked_at": "2026-10-20T04:07:27.668721+03:00",
+      "source": "https://www.radio-browser.info/history/6420aa7b-70b7-4239-aa43-e3fb17638b0b",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Diyanet Kur'an Radyo",
+      "url": "https://eustr73.mediatriple.net/videoonlylive/mtikoimxnztxlive/broadcast_5e3c14192aa92.smil/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / MPEG-TS",
+      "checked_at": "2026-10-20T04:07:28.268129+03:00",
+      "source": "https://www.radio-browser.info/history/6a02fc36-675e-422f-9f00-bab672a6233d",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    },
+    {
+      "name": "Akra FM",
+      "url": "https://d3r5bwwuab2v60.cloudfront.net/akracanli2/_definst_/livestream_aac/playlist.m3u8",
+      "category": "hls_deneme",
+      "format": "HLS / AAC (ADTS)",
+      "checked_at": "2026-10-20T04:07:28.533869+03:00",
+      "source": "https://www.radio-browser.info/history/1263b2bf-8c95-11e9-ad01-52543be04c81",
+      "list_file": "hls-deneme/90_tr_hls_deneme.csv",
+      "device_tested": false
+    }
+  ],
+  "device_validation_updated_at": "2026-10-20T04:19:12.156437+03:00"
+}

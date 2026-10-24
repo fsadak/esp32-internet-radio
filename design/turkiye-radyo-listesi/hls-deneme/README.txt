@@ -1,0 +1,1 @@
+﻿HLS deneme listesi. Bilgisayarda oynatma listesi ve medya örneği alındı; ESP32 cihaz uyumluluğu henüz doğrulanmadı. Ana listedeki doğrudan MP3/AAC grubundan ayrı test edin. Yükleme mevcut istasyon listesinin tamamını değiştirir.
