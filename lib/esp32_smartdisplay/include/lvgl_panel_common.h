@@ -8,21 +8,23 @@
 
 static inline lv_display_t* lvgl_create_display()
 {
-    lv_display_t *display = lv_display_create(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    lv_color_format_t cf = lv_display_get_color_format(display);
-    uint32_t px_size = lv_color_format_get_size(cf);
-    uint32_t drawBufferSize = px_size * LVGL_BUFFER_PIXELS;
-    void *drawBuffer = heap_caps_malloc(drawBufferSize, LVGL_BUFFER_MALLOC_FLAGS);
-    lv_display_set_buffers(display, drawBuffer, NULL, drawBufferSize, LV_DISPLAY_RENDER_MODE_PARTIAL);
-    return display;
+	lv_display_t *display = lv_display_create(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+	lv_color_format_t cf = lv_display_get_color_format(display);
+	uint32_t px_size = lv_color_format_get_size(cf);
+	uint32_t drawBufferSize = px_size * LVGL_BUFFER_PIXELS;
+	void *drawBuffer = heap_caps_malloc(drawBufferSize, LVGL_BUFFER_MALLOC_FLAGS);
+	lv_display_set_buffers(display, drawBuffer, NULL, drawBufferSize, LV_DISPLAY_RENDER_MODE_PARTIAL);
+	return display;
 }
 
 #if SOC_LCD_RGB_SUPPORTED
 static inline bool lvgl_panel_frame_trans_done(esp_lcd_panel_handle_t panel, esp_lcd_rgb_panel_event_data_t *edata, void *user_ctx)
 {
-    lv_display_t *display = (lv_display_t *)user_ctx;
-    lv_display_flush_ready(display);
-    return false;
+	// ESP-IDF 4.4's VSYNC ISR restarts LCD + DMA after this callback.
+	// Do not independently reset DMA here while the LCD engine is running.
+	lv_display_t *display = (lv_display_t *)user_ctx;
+	lv_display_flush_ready(display);
+	return false;
 }
 #endif
 

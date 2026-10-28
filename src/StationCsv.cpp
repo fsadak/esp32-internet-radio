@@ -101,7 +101,7 @@ bool parseStationCsv(const std::string& csv, std::vector<StationRecord>& result,
         if (!validUtf8(values[0])) return fail("İsim UTF-8 olmalı; kontrol karakteri kullanılamaz.");
         if (values[1].size() > 512 || !validUrl(values[1])) return fail("Geçerli http/https yayın adresi gerekli (en fazla 512 bayt).");
         for (const auto& station : parsed) if (station.url == values[1]) return fail("Aynı yayın adresi tekrar ediyor.");
-        if (parsed.size() == MAX_STATIONS) return fail("En fazla 32 istasyon yüklenebilir.");
+        if (parsed.size() == MAX_STATIONS) return fail("En fazla 128 istasyon yüklenebilir.");
         parsed.push_back({values[0], values[1]});
     }
     if (!header || parsed.empty()) { error = "Dosyada en az bir istasyon olmalı."; return false; }

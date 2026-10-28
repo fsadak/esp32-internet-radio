@@ -4,14 +4,19 @@
 #include <algorithm>
 
 bool mountRadioSd(String& error) {
-    SD.end(); SPI.end();
-    pinMode(TF_CS, OUTPUT); digitalWrite(TF_CS, HIGH);
-    SPI.begin(TF_SPI_SCLK, TF_SPI_MISO, TF_SPI_MOSI, TF_CS);
-    if (!SD.begin(TF_CS, SPI, 1000000, "/sd", 5, false) || SD.cardType() == CARD_NONE) {
-        SD.end(); SPI.end(); error = "SD kart yok veya okunamadı. Kartı takıp tekrar deneyin.";
-        return false;
-    }
-    return true;
+	SD.end(); SPI.end();
+	pinMode(TF_CS, OUTPUT); digitalWrite(TF_CS, HIGH);
+	SPI.begin(TF_SPI_SCLK, TF_SPI_MISO, TF_SPI_MOSI, TF_CS);
+	const uint32_t speeds[] = {16000000U, 4000000U, 1000000U};
+	for (uint32_t speed : speeds) {
+		if (SD.begin(TF_CS, SPI, speed, "/sd", 5, false) && SD.cardType() != CARD_NONE) {
+			return true;
+		}
+		SD.end();
+	}
+	SPI.end();
+	error = "SD kart yok veya okunamadı. Kartı takıp tekrar deneyin.";
+	return false;
 }
 
 bool validSdMusicPath(const String& path) {

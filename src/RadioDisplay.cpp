@@ -11,6 +11,16 @@ constexpr uint32_t WHITE = 0xF5F5F5;
 constexpr uint32_t MUTED = 0xA5A5A5;
 constexpr uint32_t ORANGE = 0xFF7A00;
 constexpr uint16_t VU_WIDTH = 340;
+constexpr uint32_t FAVORITE_RED = 0xF04452;
+
+String favoriteCaption(const char* name) {
+    size_t end = 0;
+    for (size_t count = 0; name[end] && count < 20; ++count) {
+        ++end;
+        while ((static_cast<uint8_t>(name[end]) & 0xC0) == 0x80) ++end;
+    }
+    return String(name).substring(0, end);
+}
 
 // Only our UI labels own these bindings. Metadata labels are never bound.
 void releaseUiText(lv_event_t* event) {
@@ -88,9 +98,9 @@ void setText(lv_obj_t* object, const char* text) {
 }
 
 String musicTime(uint32_t seconds) {
-    char value[24];
-    snprintf(value, sizeof(value), "%02lu:%02lu", (unsigned long)(seconds / 60), (unsigned long)(seconds % 60));
-    return String(value);
+	char value[24];
+	snprintf(value, sizeof(value), "%02lu:%02lu", (unsigned long)(seconds / 60), (unsigned long)(seconds % 60));
+	return String(value);
 }
 } // namespace
 
@@ -158,7 +168,9 @@ bool RadioDisplay::init(const RadioStation* stations, size_t count) {
     rectangle(root, 28, 76, 744, 1, LINE);
 
     sourceCaption_ = label(root, "İSTASYON", 28, 96, 744, radioFont(14), MUTED);
-    station_ = label(root, "", 28, 120, 744, radioFont(36), WHITE);
+    station_ = label(root, "", 28, 120, 676, radioFont(36), WHITE);
+    favoriteHeart_ = button(root, "", 716, 112, 56, 56, RadioAction::ToggleFavorite);
+    lv_obj_add_event_cb(favoriteHeart_, drawFavoriteHeart, LV_EVENT_DRAW_MAIN, this);
     musicRepeatOne_ = button(root, "Tekrar: 1", 238, 120, 154, 52, RadioAction::ToggleRepeatOne);
     musicRepeatAll_ = button(root, "Tekrar: tüm", 406, 120, 174, 52, RadioAction::ToggleRepeatAll);
     musicShuffle_ = button(root, LV_SYMBOL_SHUFFLE " Karışık", 594, 120, 178, 52, RadioAction::ToggleShuffle);
@@ -175,14 +187,13 @@ bool RadioDisplay::init(const RadioStation* stations, size_t count) {
     lv_obj_set_style_anim_duration(track_, 12000, 0);
     artist_ = label(root, "", 46, 264, 710, radioFont(18), MUTED);
 
-    previous_ = button(root, LV_SYMBOL_PREV "  Önceki", 28, 314, 160, 56,
-                       RadioAction::PreviousStation);
-    listButton_ = button(root, LV_SYMBOL_LIST "  İstasyon listesi", 204, 314, 392, 56,
-           RadioAction::OpenStations);
-    musicPause_ = button(root, LV_SYMBOL_PAUSE, 466, 314, 130, 56, RadioAction::ToggleMusicPause, true);
-    lv_obj_set_hidden(musicPause_, true);
-    next_ = button(root, "Sonraki  " LV_SYMBOL_NEXT, 612, 314, 160, 56,
-                   RadioAction::NextStation);
+	previous_ = button(root, LV_SYMBOL_PREV "  Önceki", 28, 314, 160, 56,
+	                   RadioAction::PreviousStation);
+	listButton_ = button(root, LV_SYMBOL_LIST "  İstasyon listesi", 204, 314, 246, 56,
+	       RadioAction::OpenStations);
+	musicPause_ = button(root, LV_SYMBOL_PLAY " Oynat", 466, 314, 130, 56, RadioAction::ToggleMusicPause, true);
+	next_ = button(root, "Sonraki  " LV_SYMBOL_NEXT, 612, 314, 160, 56,
+	               RadioAction::NextStation);
 
     auto* footer = rectangle(root, 0, 388, 800, 92, PANEL);
     status_ = label(footer, "", 28, 8, 248, radioFont(14), ORANGE);
@@ -190,38 +201,39 @@ bool RadioDisplay::init(const RadioStation* stations, size_t count) {
     rectangle(footer, 200, 38, 1, 16, LINE);
     format_ = label(footer, "—", 212, 36, 72, radioFont(14), WHITE);
     stationCountLabel_ = label(footer, "", 28, 64, 248, radioFont(14), MUTED);
-    minus_ = button(footer, LV_SYMBOL_MINUS, 300, 12, 64, 68,
-                    RadioAction::VolumeDown, true);
-    auto* caption = label(footer, "SES", 376, 3, 72, radioFont(14), MUTED);
-    volume_ = label(footer, "11", 376, 24, 72, radioFont(36), WHITE);
-    lv_obj_set_style_text_align(volume_, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_set_style_text_align(caption, LV_TEXT_ALIGN_CENTER, 0);
-    plus_ = button(footer, LV_SYMBOL_PLUS, 460, 12, 64, 68,
-                   RadioAction::VolumeUp, true);
-    musicSeekBack_ = button(footer, "-10", 540, 12, 72, 68, RadioAction::MusicSeekBack);
-    musicSeekForward_ = button(footer, "+10", 624, 12, 72, 68, RadioAction::MusicSeekForward);
-    lv_obj_set_hidden(musicSeekBack_, true); lv_obj_set_hidden(musicSeekForward_, true);
-    mute_ = button(footer, LV_SYMBOL_VOLUME_MAX, 708, 16, 64, 64,
-                   RadioAction::ToggleMute);
-    muteIcon_ = lv_obj_get_child(mute_, 0);
+	minus_ = button(footer, LV_SYMBOL_MINUS, 300, 12, 64, 68,
+	                RadioAction::VolumeDown, true);
+	auto* caption = label(footer, "SES", 376, 3, 72, radioFont(14), MUTED);
+	volume_ = label(footer, "11", 376, 24, 72, radioFont(36), WHITE);
+	lv_obj_set_style_text_align(volume_, LV_TEXT_ALIGN_CENTER, 0);
+	lv_obj_set_style_text_align(caption, LV_TEXT_ALIGN_CENTER, 0);
+	plus_ = button(footer, LV_SYMBOL_PLUS, 460, 12, 64, 68,
+	               RadioAction::VolumeUp, true);
+	musicSeekBack_ = button(footer, "-10", 540, 12, 72, 68, RadioAction::MusicSeekBack);
+	musicSeekForward_ = button(footer, "+10", 624, 12, 72, 68, RadioAction::MusicSeekForward);
+	for (auto* repeatable : {minus_, plus_, musicSeekBack_, musicSeekForward_})
+		lv_obj_add_event_cb(repeatable, onButton, LV_EVENT_LONG_PRESSED_REPEAT, this);
+	lv_obj_set_hidden(musicSeekBack_, true); lv_obj_set_hidden(musicSeekForward_, true);
+	mute_ = button(footer, LV_SYMBOL_VOLUME_MAX, 708, 16, 64, 64,
+	               RadioAction::ToggleMute);
+	muteIcon_ = lv_obj_get_child(mute_, 0);
+    favoritesButton_ = button(footer, "Favoriler", 540, 16, 156, 64, RadioAction::OpenFavorites);
 
-    // Overlays stay allocated so opening/closing them never disrupts playback.
-    stationOverlay_ = rectangle(root, 0, 0, 800, 480, BG);
-    label(stationOverlay_, "İSTASYON LİSTESİ", 28, 28, 650,
-          radioFont(24), ORANGE);
-    button(stationOverlay_, LV_SYMBOL_CLOSE, 716, 14, 56, 56,
-           RadioAction::CloseStations);
-    label(stationOverlay_, "Dinlemek için bir istasyona dokunun", 28, 79, 744,
-          radioFont(14), MUTED);
-    stationList_ = rectangle(stationOverlay_, 28, 106, 744, 290, BG);
-    lv_obj_set_scrollable(stationList_, true);
-    lv_obj_set_scroll_dir(stationList_, LV_DIR_VER);
-    lv_obj_set_scrollbar_mode(stationList_, LV_SCROLLBAR_MODE_AUTO);
-    stationPagePrevious_ = button(stationOverlay_, LV_SYMBOL_LEFT, 28, 410, 96, 56, RadioAction::StationsPreviousPage);
-    stationPageLabel_ = label(stationOverlay_, "", 152, 426, 460, radioFont(18), MUTED);
-    stationPageNext_ = button(stationOverlay_, LV_SYMBOL_RIGHT, 676, 410, 96, 56, RadioAction::StationsNextPage);
-    refreshStationRows();
-    lv_obj_set_hidden(stationOverlay_, true);
+	// Overlays stay allocated so opening/closing them never disrupts playback.
+	stationOverlay_ = rectangle(root, 0, 0, 800, 480, BG);
+	label(stationOverlay_, "İSTASYON LİSTESİ", 28, 28, 650,
+	      radioFont(24), ORANGE);
+	button(stationOverlay_, LV_SYMBOL_CLOSE, 716, 14, 56, 56,
+	       RadioAction::CloseStations);
+	label(stationOverlay_, "Dinlemek için bir istasyona dokunun", 28, 79, 744,
+	      radioFont(14), MUTED);
+	stationList_ = rectangle(stationOverlay_, 28, 106, 744, 290, BG);
+	stationPagePrevious_ = button(stationOverlay_, LV_SYMBOL_LEFT, 28, 410, 96, 56, RadioAction::StationsPreviousPage);
+	stationPageLabel_ = label(stationOverlay_, "", 152, 426, 460, radioFont(18), MUTED);
+	stationPageNext_ = button(stationOverlay_, LV_SYMBOL_RIGHT, 676, 410, 96, 56, RadioAction::StationsNextPage);
+	refreshStationRows();
+	lv_obj_set_hidden(stationOverlay_, true);
+    buildFavorites();
 
     buildSettings();
     buildImport();
@@ -238,6 +250,21 @@ void RadioDisplay::onButton(lv_event_t* event) {
     auto* object = static_cast<lv_obj_t*>(lv_event_get_current_target(event));
     const auto action = static_cast<RadioAction>(reinterpret_cast<uintptr_t>(lv_obj_get_user_data(object)));
     switch (action) {
+    case RadioAction::OpenFavorites:
+        if (!self->musicSource_) {
+            self->favoritesPage_ = 0;
+            self->refreshFavoriteTiles();
+            lv_obj_set_hidden(self->favoritesOverlay_, false);
+        }
+        break;
+    case RadioAction::CloseFavorites:
+        lv_obj_set_hidden(self->favoritesOverlay_, true); break;
+    case RadioAction::FavoritesPreviousPage:
+        if (self->favoritesPage_) --self->favoritesPage_;
+        self->refreshFavoriteTiles(); break;
+    case RadioAction::FavoritesNextPage:
+        ++self->favoritesPage_;
+        self->refreshFavoriteTiles(); break; // Refresh clamps the page to available entries.
     case RadioAction::OpenMusic:
         self->enqueue(self->musicSource_ ? RadioAction::SwitchRadio : RadioAction::OpenMusic); break;
     case RadioAction::CloseMusic: lv_obj_set_hidden(self->musicOverlay_, true); break;
@@ -250,25 +277,25 @@ void RadioDisplay::onButton(lv_event_t* event) {
     case RadioAction::MusicNextPage:
         if ((self->musicPage_ + 1) * 5 < self->musicEntries_.size()) ++self->musicPage_;
         self->refreshMusicRows(); break;
-    case RadioAction::OpenStations:
-        if (self->musicSource_) { self->enqueue(RadioAction::OpenMusic); break; }
-        self->stationPage_ = self->currentStation_ / 8;
-        self->refreshStationRows();
-        lv_obj_set_hidden(self->stationOverlay_, false); break;
-    case RadioAction::CloseStations: lv_obj_set_hidden(self->stationOverlay_, true); break;
-    case RadioAction::OpenSettings: self->openSettings(); break;
-    case RadioAction::CloseSettings: self->enqueue(RadioAction::CancelSettings); break;
-    case RadioAction::OpenEqualizer:
-        self->refreshSettingsLabels();
-        lv_obj_set_hidden(self->equalizerPanel_, false); break;
-    case RadioAction::CloseEqualizer:
-        lv_obj_set_hidden(self->equalizerPanel_, true); break;
-    case RadioAction::StationsPreviousPage:
-        if (self->stationPage_) --self->stationPage_;
-        self->refreshStationRows(); break;
-    case RadioAction::StationsNextPage:
-        if ((self->stationPage_ + 1) * 8 < self->stationCount_) ++self->stationPage_;
-        self->refreshStationRows(); break;
+	case RadioAction::OpenStations:
+		if (self->musicSource_) { self->enqueue(RadioAction::OpenMusic); break; }
+		self->stationPage_ = self->currentStation_ / 5;
+		self->refreshStationRows();
+		lv_obj_set_hidden(self->stationOverlay_, false); break;
+	case RadioAction::CloseStations: lv_obj_set_hidden(self->stationOverlay_, true); break;
+	case RadioAction::OpenSettings: self->openSettings(); break;
+	case RadioAction::CloseSettings: self->enqueue(RadioAction::CancelSettings); break;
+	case RadioAction::OpenEqualizer:
+		self->refreshSettingsLabels();
+		lv_obj_set_hidden(self->equalizerPanel_, false); break;
+	case RadioAction::CloseEqualizer:
+		lv_obj_set_hidden(self->equalizerPanel_, true); break;
+	case RadioAction::StationsPreviousPage:
+		if (self->stationPage_) --self->stationPage_;
+		self->refreshStationRows(); break;
+	case RadioAction::StationsNextPage:
+		if ((self->stationPage_ + 1) * 5 < self->stationCount_) ++self->stationPage_;
+		self->refreshStationRows(); break;
     case RadioAction::ImportPreviousPage:
         if (self->importPage_) --self->importPage_;
         self->refreshImportRows(); break;
@@ -285,6 +312,51 @@ void RadioDisplay::onStation(lv_event_t* event) {
     self->enqueue(RadioAction::SelectStation,
                   reinterpret_cast<uintptr_t>(lv_obj_get_user_data(row)));
     lv_obj_set_hidden(self->stationOverlay_, true);
+}
+
+void RadioDisplay::onStationDelete(lv_event_t* event) {
+    auto* self = static_cast<RadioDisplay*>(lv_event_get_user_data(event));
+    auto* trash = static_cast<lv_obj_t*>(lv_event_get_current_target(event));
+    self->enqueue(RadioAction::RequestDeleteStation,
+                  reinterpret_cast<uintptr_t>(lv_obj_get_user_data(trash)));
+}
+
+void RadioDisplay::showStationDelete(const String& name, bool unavailable, bool canDelete) {
+    if (!display_) return;
+    if (!stationDeleteOverlay_) {
+        stationDeleteOverlay_ = rectangle(lv_display_get_screen_active(display_), 0, 0, 800, 480, BG);
+        label(stationDeleteOverlay_, "İstasyon silinsin mi?", 28, 28, 744, radioFont(28), ORANGE);
+        stationDeleteName_ = label(stationDeleteOverlay_, "", 28, 104, 744, radioFont(24), WHITE);
+        lv_obj_set_height(stationDeleteName_, 110);
+        lv_label_set_long_mode(stationDeleteName_, LV_LABEL_LONG_MODE_WRAP);
+        stationDeleteHint_ = label(stationDeleteOverlay_, "", 28, 232, 744, radioFont(18), MUTED);
+        lv_obj_set_height(stationDeleteHint_, 88);
+        lv_label_set_long_mode(stationDeleteHint_, LV_LABEL_LONG_MODE_WRAP);
+        stationDeleteError_ = label(stationDeleteOverlay_, "", 28, 330, 744, radioFont(14), FAVORITE_RED);
+        lv_obj_set_height(stationDeleteError_, 66);
+        lv_label_set_long_mode(stationDeleteError_, LV_LABEL_LONG_MODE_WRAP);
+        button(stationDeleteOverlay_, "Vazgeç", 28, 410, 354, 56, RadioAction::CancelDeleteStation);
+        stationDeleteConfirm_ = button(stationDeleteOverlay_, "Sil", 402, 410, 370, 56, RadioAction::ConfirmDeleteStation, true);
+        lv_obj_set_style_bg_color(stationDeleteConfirm_, lv_color_hex(FAVORITE_RED), 0);
+    }
+    setText(stationDeleteName_, name.c_str());
+    String hint = unavailable ? String("Yayına ulaşılamadı. Bu durum geçici olabilir.\n") : String("");
+    hint += canDelete ? "Silme kalıcıdır. Çalan istasyon silinirse yayın durur." :
+                       "Son istasyon silinemez. Önce başka bir istasyon ekleyin.";
+    setUiText(stationDeleteHint_, hint.c_str());
+    setText(stationDeleteError_, "");
+    lv_obj_set_state(stationDeleteConfirm_, LV_STATE_DISABLED, !canDelete);
+    lv_obj_set_hidden(stationDeleteOverlay_, false);
+    lv_obj_move_foreground(stationDeleteOverlay_);
+}
+
+void RadioDisplay::showStationDeleteError(const String& message) {
+    if (stationDeleteError_) setUiText(stationDeleteError_, message.c_str());
+}
+
+void RadioDisplay::closeStationDelete(bool closeList) {
+    if (stationDeleteOverlay_) lv_obj_set_hidden(stationDeleteOverlay_, true);
+    if (closeList && stationOverlay_) lv_obj_set_hidden(stationOverlay_, true);
 }
 
 void RadioDisplay::enqueue(RadioAction action, size_t stationIndex) {
@@ -339,41 +411,48 @@ void RadioDisplay::updateVu(uint16_t level, uint16_t peak) {
 }
 
 void RadioDisplay::loop() {
-    if (!display_) return;
-    const uint32_t now = millis();
-    lv_tick_inc(now - lastTick_);
-    lastTick_ = now;
-    lv_timer_handler();
-    if (!dimmed_ && dimSeconds_ &&
-        lv_display_get_inactive_time(display_) >= static_cast<uint32_t>(dimSeconds_) * 1000) {
-        dimmed_ = true;
-        backlightOff_ = false;
-        dimmedAt_ = millis();
-        smartdisplay_lcd_set_backlight(normalBrightness_ / 510.0f);
-        lv_obj_move_foreground(wakeOverlay_);
-        lv_obj_set_hidden(wakeOverlay_, false);
-    } else if (dimmed_ && !backlightOff_ && millis() - dimmedAt_ >= 15000) {
-        backlightOff_ = true;
-        smartdisplay_lcd_set_backlight(0.0f);
-    }
-    if (!lv_obj_is_hidden(settingsOverlay_) && now - lastDeviceUpdate_ >= 1000) {
-        lastDeviceUpdate_ = now;
-        refreshDeviceInfo();
-    }
+	if (!display_) return;
+	const uint32_t now = millis();
+	lv_tick_inc(now - lastTick_);
+	lastTick_ = now;
+	lv_timer_handler();
+	if (!dimmed_ && dimSeconds_ &&
+	    lv_display_get_inactive_time(display_) >= static_cast<uint32_t>(dimSeconds_) * 1000) {
+		dimmed_ = true;
+		backlightOff_ = false;
+		dimmedAt_ = millis();
+		smartdisplay_lcd_set_backlight(normalBrightness_ / 510.0f);
+		lv_obj_move_foreground(wakeOverlay_);
+		lv_obj_set_hidden(wakeOverlay_, false);
+	} else if (dimmed_ && !backlightOff_ && millis() - dimmedAt_ >= 15000) {
+		backlightOff_ = true;
+		smartdisplay_lcd_set_backlight(0.0f);
+		if (track_) lv_label_set_long_mode(track_, LV_LABEL_LONG_MODE_DOTS);
+	}
+	if (!lv_obj_is_hidden(settingsOverlay_) && now - lastDeviceUpdate_ >= 1000) {
+		lastDeviceUpdate_ = now;
+		refreshDeviceInfo();
+	}
 }
 
 void RadioDisplay::update(const String& station, const String& track,
                           const String& status, const String& genre, const String& format,
                           bool wifiConnected,
-                          uint8_t volume, bool muted, size_t currentStation) {
-    if (!display_) return;
-    setText(station_, station.c_str());
-    const int separator = track.indexOf(" - ");
-    const String title = separator >= 0 ? track.substring(separator + 3) : track;
-    const String artist = separator >= 0 ? track.substring(0, separator) : String("");
-    setText(track_, title.c_str());
-    setText(artist_, artist.c_str());
-    setUiText(status_, status.c_str());
+                          uint8_t volume, bool muted, size_t currentStation, bool trackIsStatus) {
+	if (!display_) return;
+	if (musicSource_) setUiText(station_, "SD KART");
+	else setText(station_, station.c_str());
+	if (trackIsStatus) {
+		setUiText(track_, track.c_str());
+		setText(artist_, "");
+	} else {
+		const int separator = track.indexOf(" - ");
+		const String title = separator >= 0 ? track.substring(separator + 3) : track;
+		const String artist = separator >= 0 ? track.substring(0, separator) : String("");
+		setText(track_, title.c_str());
+		setText(artist_, artist.c_str());
+	}
+	setUiText(status_, status.c_str());
     const String genreText = musicSource_ ? uiText("Süre: ") + musicTime(musicElapsed_) + "/" +
         (musicDuration_ ? musicTime(musicDuration_) : String("--:--")) :
         uiText("Tür: ") + (genre.length() ? genre : String("—"));
@@ -389,48 +468,250 @@ void RadioDisplay::update(const String& station, const String& track,
     const size_t itemCount = musicSource_ ? musicCount_ : stationCount_;
     lv_obj_set_state(previous_, LV_STATE_DISABLED, itemCount < 2);
     lv_obj_set_state(next_, LV_STATE_DISABLED, itemCount < 2);
-    const String countText = musicSource_ ? String(musicCount_ ? musicIndex_ + 1 : 0) + " / " + String(musicCount_) + " parça" :
-        String(currentStation + 1) + " / " + String(stationCount_) + " istasyon";
-    currentStation_ = currentStation;
-    setUiText(stationCountLabel_, countText.c_str());
-    for (size_t i = 0; i < lv_obj_get_child_count(stationList_); ++i) {
-        lv_obj_set_state(lv_obj_get_child(stationList_, i), LV_STATE_CHECKED, stationPage_ * 8 + i == currentStation);
+	const String countText = musicSource_ ? String(musicCount_ ? musicIndex_ + 1 : 0) + " / " + String(musicCount_) + " parça" :
+		String(currentStation + 1) + " / " + String(stationCount_) + " istasyon";
+	currentStation_ = currentStation;
+    refreshFavoriteHeart();
+	setUiText(stationCountLabel_, countText.c_str());
+	for (size_t i = 0; i < 5; ++i)
+        if (stationRows_[i]) lv_obj_set_state(stationRows_[i], LV_STATE_CHECKED, stationPage_ * 5 + i == currentStation);
+    if (favoritesOverlay_ && !lv_obj_is_hidden(favoritesOverlay_)) {
+        for (size_t slot = 0; slot < 8; ++slot)
+            lv_obj_set_state(favoriteTiles_[slot], LV_STATE_CHECKED,
+                favoriteTileStations_[slot] < stationCount_ && favoriteTileStations_[slot] == currentStation);
     }
 }
 
 void RadioDisplay::present() {
-    if (!display_) return;
-    loop();
-    lv_refr_now(display_);
+	if (!display_) return;
+	loop();
+	lv_refr_now(display_);
+}
+
+void RadioDisplay::showOtaNotice(bool completed) {
+	if (!display_) return;
+	otaDisplayActive_ = true; // Own the display until failure recovery or reboot.
+	if (!otaNotice_) {
+		otaNotice_ = rectangle(lv_display_get_screen_active(display_), 0, 0, 800, 480, BG);
+		otaNoticeTitle_ = label(otaNotice_, "", 28, 176, 744, radioFont(28), ORANGE);
+		lv_obj_set_height(otaNoticeTitle_, 90);
+		lv_label_set_long_mode(otaNoticeTitle_, LV_LABEL_LONG_MODE_WRAP);
+		lv_obj_set_style_text_align(otaNoticeTitle_, LV_TEXT_ALIGN_CENTER, 0);
+		otaNoticeHint_ = label(otaNotice_, "Gücü kesmeyin veya cihazı kapatmayın.", 28, 300, 744, radioFont(18), WHITE);
+		lv_obj_set_style_text_align(otaNoticeHint_, LV_TEXT_ALIGN_CENTER, 0);
+	}
+	// Static notices are shown only before flash operations and after verification.
+	smartdisplay_lcd_set_backlight(0.0f);
+	dimmed_ = backlightOff_ = false;
+	if (wakeOverlay_) lv_obj_set_hidden(wakeOverlay_, true);
+	if (track_) lv_label_set_long_mode(track_, LV_LABEL_LONG_MODE_DOTS);
+	setUiText(otaNoticeTitle_, completed ? "Güncelleme tamamlandı. Yeniden başlatılıyor..." : "Güncelleme başlatıldı.");
+	lv_obj_set_hidden(otaNotice_, false);
+	lv_obj_move_foreground(otaNotice_);
+	lastTick_ = millis();
+	lv_display_trigger_activity(display_);
+	lv_refr_now(display_);
+	smartdisplay_lcd_set_backlight(normalBrightness_ / 255.0f);
+}
+
+void RadioDisplay::beginOta() {
+	if (!display_) return;
+	otaDisplayActive_ = true;
+	// Hide flash/PSRAM transfer artefacts before the first OTA/NVS write.
+	smartdisplay_lcd_set_backlight(0.0f);
+	dimmed_ = false;
+	backlightOff_ = true;
+	if (track_) lv_label_set_long_mode(track_, LV_LABEL_LONG_MODE_DOTS);
+}
+
+void RadioDisplay::endOta() {
+	if (!display_ || !otaDisplayActive_) return;
+	otaDisplayActive_ = false;
+	if (otaNotice_) lv_obj_set_hidden(otaNotice_, true);
+	dimmed_ = backlightOff_ = false;
+	dimmedAt_ = 0;
+	if (wakeOverlay_) lv_obj_set_hidden(wakeOverlay_, true);
+	if (track_) {
+		lv_label_set_long_mode(track_, musicSource_ ?
+			LV_LABEL_LONG_MODE_DOTS : LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
+	}
+	// OTA intentionally skips the display loop; resume with a fresh idle period.
+	lastTick_ = millis();
+	lv_display_trigger_activity(display_);
+	lv_obj_invalidate(lv_display_get_screen_active(display_));
+	smartdisplay_lcd_set_backlight(normalBrightness_ / 255.0f);
 }
 
 void RadioDisplay::refreshStationRows() {
-    lv_obj_clean(stationList_);
-    const size_t first = stationPage_ * 8;
-    for (size_t i = first; i < stationCount_ && i < first + 8; ++i) {
-        auto* row = button(stationList_, stations_[i].name, 0, (i - first) * 64, 724, 56, RadioAction::None, false, false);
-        lv_obj_remove_event_cb(row, onButton);
-        lv_obj_set_user_data(row, reinterpret_cast<void*>(i));
-        lv_obj_add_event_cb(row, onStation, LV_EVENT_CLICKED, this);
-        lv_obj_set_style_border_color(row, lv_color_hex(ORANGE), LV_STATE_CHECKED);
-        lv_obj_set_style_border_width(row, 2, LV_STATE_CHECKED);
-        lv_obj_set_state(row, LV_STATE_CHECKED, i == currentStation_);
-        auto* text = lv_obj_get_child(row, 0);
-        lv_obj_set_width(text, 670);
-        lv_label_set_long_mode(text, LV_LABEL_LONG_MODE_DOTS);
-        lv_obj_set_style_text_align(text, LV_TEXT_ALIGN_LEFT, 0);
+	lv_obj_clean(stationList_);
+    for (auto& row : stationRows_) row = nullptr;
+	const size_t first = stationPage_ * 5;
+	for (size_t i = first; i < stationCount_ && i < first + 5; ++i) {
+		auto* row = button(stationList_, stations_[i].name, 0, (i - first) * 58, 660, 50, RadioAction::None, false, false);
+        stationRows_[i - first] = row;
+		lv_obj_remove_event_cb(row, onButton);
+		lv_obj_set_user_data(row, reinterpret_cast<void*>(i));
+		lv_obj_add_event_cb(row, onStation, LV_EVENT_CLICKED, this);
+		lv_obj_set_style_border_color(row, lv_color_hex(ORANGE), LV_STATE_CHECKED);
+		lv_obj_set_style_border_width(row, 2, LV_STATE_CHECKED);
+		lv_obj_set_state(row, LV_STATE_CHECKED, i == currentStation_);
+		auto* text = lv_obj_get_child(row, 0);
+		lv_obj_set_width(text, 616);
+		lv_label_set_long_mode(text, LV_LABEL_LONG_MODE_DOTS);
+		lv_obj_set_style_text_align(text, LV_TEXT_ALIGN_LEFT, 0);
+        auto* trash = button(stationList_, LV_SYMBOL_TRASH, 676, (i - first) * 58, 68, 50, RadioAction::None);
+        lv_obj_remove_event_cb(trash, onButton);
+        lv_obj_set_user_data(trash, reinterpret_cast<void*>(i));
+        lv_obj_add_event_cb(trash, onStationDelete, LV_EVENT_CLICKED, this);
+        lv_obj_set_style_text_color(trash, lv_color_hex(FAVORITE_RED), 0);
+	}
+	const String page = "Sayfa " + String(stationPage_ + 1) + " / " + String((stationCount_ + 4) / 5);
+	setUiText(stationPageLabel_, page.c_str());
+	lv_obj_set_state(stationPagePrevious_, LV_STATE_DISABLED, stationPage_ == 0);
+	lv_obj_set_state(stationPageNext_, LV_STATE_DISABLED, (stationPage_ + 1) * 5 >= stationCount_);
+}
+
+void RadioDisplay::drawFavoriteHeart(lv_event_t* event) {
+    auto* object = static_cast<lv_obj_t*>(lv_event_get_current_target(event));
+    auto* layer = lv_event_get_layer(event);
+    lv_area_t area;
+    lv_obj_get_coords(object, &area);
+    const int x = area.x1 + 10, y = area.y1 + 9;
+    const bool filled = lv_obj_has_state(object, LV_STATE_CHECKED);
+    const auto color = lv_color_hex(filled ? FAVORITE_RED : WHITE);
+    // Small vector icon: no external font glyph or downloaded image is required.
+    static const lv_point_precise_t outline[] = {
+        {18,8},{15,4},{11,2},{7,2},{3,4},{1,8},{1,12},{3,17},{8,23},
+        {18,32},{28,23},{33,17},{35,12},{35,8},{33,4},{29,2},{25,2},{21,4},{18,8}
+    };
+    for (size_t i = 1; i < sizeof(outline) / sizeof(outline[0]); ++i) {
+        if (filled) {
+            lv_draw_triangle_dsc_t triangle;
+            lv_draw_triangle_dsc_init(&triangle);
+            triangle.color = color;
+            triangle.p[0] = {x + 18, y + 17};
+            triangle.p[1] = {x + outline[i-1].x, y + outline[i-1].y};
+            triangle.p[2] = {x + outline[i].x, y + outline[i].y};
+            lv_draw_triangle(layer, &triangle);
+        }
+        lv_draw_line_dsc_t line;
+        lv_draw_line_dsc_init(&line);
+        line.color = color; line.width = 2;
+        line.p1 = {x + outline[i-1].x, y + outline[i-1].y};
+        line.p2 = {x + outline[i].x, y + outline[i].y};
+        lv_draw_line(layer, &line);
     }
-    lv_obj_scroll_to_y(stationList_, 0, LV_ANIM_OFF);
-    const String page = "Sayfa " + String(stationPage_ + 1) + " / " + String((stationCount_ + 7) / 8);
-    setUiText(stationPageLabel_, page.c_str());
-    lv_obj_set_state(stationPagePrevious_, LV_STATE_DISABLED, stationPage_ == 0);
-    lv_obj_set_state(stationPageNext_, LV_STATE_DISABLED, (stationPage_ + 1) * 8 >= stationCount_);
+}
+
+void RadioDisplay::buildFavorites() {
+    favoritesOverlay_ = rectangle(lv_display_get_screen_active(display_), 0, 0, 800, 480, BG);
+    label(favoritesOverlay_, "FAVORİLER", 28, 24, 650, radioFont(24), ORANGE);
+    button(favoritesOverlay_, LV_SYMBOL_CLOSE, 716, 14, 56, 56, RadioAction::CloseFavorites);
+    label(favoritesOverlay_, "Dinlemek için bir istasyona dokunun", 28, 76, 744, radioFont(14), MUTED);
+    static const lv_point_precise_t antennaPoints[] = {{8,20},{50,4}};
+    for (size_t slot = 0; slot < 8; ++slot) {
+        auto* tile = button(favoritesOverlay_, "", 28 + (slot % 4) * 190,
+                            108 + (slot / 4) * 144, 174, 128, RadioAction::None);
+        favoriteTiles_[slot] = tile;
+        lv_obj_remove_event_cb(tile, onButton);
+        lv_obj_set_user_data(tile, reinterpret_cast<void*>(slot));
+        lv_obj_add_event_cb(tile, onFavoriteStation, LV_EVENT_CLICKED, this);
+        lv_obj_set_style_border_color(tile, lv_color_hex(ORANGE), LV_STATE_CHECKED);
+        lv_obj_set_style_border_width(tile, 2, LV_STATE_CHECKED);
+        // A fixed image slot leaves room for future station logos.
+        auto* imageSlot = rectangle(tile, 55, 10, 64, 68, PANEL);
+        favoriteImages_[slot] = imageSlot;
+        lv_obj_remove_flag(imageSlot, LV_OBJ_FLAG_CLICKABLE);
+        auto* antenna = lv_line_create(imageSlot);
+        lv_line_set_points(antenna, antennaPoints, 2);
+        lv_obj_set_style_line_color(antenna, lv_color_hex(ORANGE), 0);
+        lv_obj_set_style_line_width(antenna, 2, 0);
+        lv_obj_remove_flag(antenna, LV_OBJ_FLAG_CLICKABLE);
+        auto* body = rectangle(imageSlot, 4, 20, 56, 38, PANEL, 4);
+        auto* speaker = rectangle(imageSlot, 10, 28, 22, 22, PANEL, 11);
+        for (auto* object : {body, speaker}) {
+            lv_obj_set_style_border_width(object, 2, 0);
+            lv_obj_set_style_border_color(object, lv_color_hex(ORANGE), 0);
+            lv_obj_remove_flag(object, LV_OBJ_FLAG_CLICKABLE);
+        }
+        for (int y : {30, 38, 46}) {
+            auto* dial = rectangle(imageSlot, 39, y, 14, 2, ORANGE);
+            lv_obj_remove_flag(dial, LV_OBJ_FLAG_CLICKABLE);
+        }
+        favoriteNames_[slot] = label(tile, "", 8, 96, 158, radioFont(14), WHITE);
+        lv_obj_set_style_text_align(favoriteNames_[slot], LV_TEXT_ALIGN_CENTER, 0);
+        lv_label_set_long_mode(favoriteNames_[slot], LV_LABEL_LONG_MODE_DOTS);
+    }
+    favoritesEmpty_ = label(favoritesOverlay_, "Henüz favori istasyon yok. Kalp simgesine dokunarak ekleyin.",
+                            60, 190, 680, radioFont(24), MUTED);
+    lv_obj_set_height(favoritesEmpty_, 100);
+    lv_label_set_long_mode(favoritesEmpty_, LV_LABEL_LONG_MODE_WRAP);
+    lv_obj_set_style_text_align(favoritesEmpty_, LV_TEXT_ALIGN_CENTER, 0);
+    favoritesPrevious_ = button(favoritesOverlay_, LV_SYMBOL_LEFT, 28, 410, 96, 56, RadioAction::FavoritesPreviousPage);
+    favoritesPageLabel_ = label(favoritesOverlay_, "", 124, 426, 552, radioFont(18), MUTED);
+    lv_obj_set_style_text_align(favoritesPageLabel_, LV_TEXT_ALIGN_CENTER, 0);
+    favoritesNext_ = button(favoritesOverlay_, LV_SYMBOL_RIGHT, 676, 410, 96, 56, RadioAction::FavoritesNextPage);
+    refreshFavoriteTiles();
+    lv_obj_set_hidden(favoritesOverlay_, true);
+}
+
+void RadioDisplay::refreshFavoriteTiles() {
+    if (!favoritesOverlay_) return;
+    size_t indices[MAX_STATIONS], count = 0;
+    for (size_t i = 0; i < stationCount_ && i < MAX_STATIONS; ++i)
+        if (favoritesMask_.test(i)) indices[count++] = i;
+    const size_t pages = count ? (count + 7) / 8 : 1;
+    if (favoritesPage_ >= pages) favoritesPage_ = pages - 1;
+    for (size_t slot = 0; slot < 8; ++slot) {
+        const size_t entry = favoritesPage_ * 8 + slot;
+        const bool present = entry < count;
+        lv_obj_set_hidden(favoriteTiles_[slot], !present);
+        favoriteTileStations_[slot] = present ? indices[entry] : stationCount_;
+        if (present) {
+            const size_t index = indices[entry];
+            setText(favoriteNames_[slot], favoriteCaption(stations_[index].name).c_str());
+            lv_obj_set_state(favoriteTiles_[slot], LV_STATE_CHECKED, index == currentStation_);
+        }
+    }
+    lv_obj_set_hidden(favoritesEmpty_, count != 0);
+    const String page = "Sayfa " + String(favoritesPage_ + 1) + " / " + String(pages);
+    setUiText(favoritesPageLabel_, page.c_str());
+    lv_obj_set_state(favoritesPrevious_, LV_STATE_DISABLED, favoritesPage_ == 0);
+    lv_obj_set_state(favoritesNext_, LV_STATE_DISABLED, favoritesPage_ + 1 >= pages);
+}
+
+void RadioDisplay::refreshFavoriteHeart() {
+    if (!favoriteHeart_) return;
+    const bool selected = currentStation_ < stationCount_ && currentStation_ < MAX_STATIONS &&
+        favoritesMask_.test(currentStation_);
+    if (lv_obj_has_state(favoriteHeart_, LV_STATE_CHECKED) == selected) return;
+    lv_obj_set_state(favoriteHeart_, LV_STATE_CHECKED, selected);
+    // The heart is custom DRAW_MAIN content. CHECKED has no distinct LVGL style,
+    // so a state change alone need not invalidate its pixels. Redraw only here.
+    lv_obj_invalidate(favoriteHeart_);
+}
+
+void RadioDisplay::setFavorites(const StationFavoriteMask& mask) {
+    if (favoritesMask_ == mask) return;
+    favoritesMask_ = mask;
+    refreshFavoriteHeart();
+    refreshFavoriteTiles();
+}
+
+void RadioDisplay::onFavoriteStation(lv_event_t* event) {
+    auto* self = static_cast<RadioDisplay*>(lv_event_get_user_data(event));
+    auto* tile = static_cast<lv_obj_t*>(lv_event_get_current_target(event));
+    const size_t slot = reinterpret_cast<uintptr_t>(lv_obj_get_user_data(tile));
+    if (slot >= 8 || self->favoriteTileStations_[slot] >= self->stationCount_) return;
+    self->enqueue(RadioAction::SelectStation, self->favoriteTileStations_[slot]);
+    lv_obj_set_hidden(self->favoritesOverlay_, true);
 }
 
 void RadioDisplay::setStations(const RadioStation* stations, size_t count) {
     stations_ = stations; stationCount_ = count; stationPage_ = 0; currentStation_ = 0;
     savedSettings_.bootStation = 0; draftSettings_.bootStation = 0;
     refreshStationRows();
+    refreshFavoriteTiles();
     lv_dropdown_close(bootStationDropdown_);
     String names;
     for (size_t i = 0; i < count; ++i) { if (i) names += '\n'; names += stations[i].name; }
@@ -615,21 +896,22 @@ void RadioDisplay::buildSettings() {
     lv_obj_set_user_data(flat, reinterpret_cast<void*>(6));
     lv_obj_add_event_cb(flat, onEqualizer, LV_EVENT_CLICKED, this);
     button(equalizerPanel_, "Geri", 568, 0, 160, 44, RadioAction::CloseEqualizer);
-    const char* bands[] = {"Bas", "Orta", "Tiz"};
-    for (size_t i = 0; i < 3; ++i) {
-        const int y = 60 + i * 70;
-        label(equalizerPanel_, bands[i], 0, y + 14, 220, radioFont(24), WHITE);
-        equalizerMinus_[i] = button(equalizerPanel_, "-", 260, y, 80, 52, RadioAction::None);
-        equalizerValues_[i] = label(equalizerPanel_, "", 350, y + 14, 180, radioFont(24), ORANGE);
-        lv_obj_set_style_text_align(equalizerValues_[i], LV_TEXT_ALIGN_CENTER, 0);
-        equalizerPlus_[i] = button(equalizerPanel_, "+", 540, y, 80, 52, RadioAction::None);
-        lv_obj_t* controls[] = {equalizerMinus_[i], equalizerPlus_[i]};
-        for (size_t j = 0; j < 2; ++j) {
-            lv_obj_remove_event_cb(controls[j], onButton);
-            lv_obj_set_user_data(controls[j], reinterpret_cast<void*>(i * 2 + j));
-            lv_obj_add_event_cb(controls[j], onEqualizer, LV_EVENT_CLICKED, this);
-        }
-    }
+	const char* bands[] = {"Bas", "Orta", "Tiz"};
+	for (size_t i = 0; i < 3; ++i) {
+		const int y = 60 + i * 70;
+		label(equalizerPanel_, bands[i], 0, y + 14, 220, radioFont(24), WHITE);
+		equalizerMinus_[i] = button(equalizerPanel_, "-", 260, y, 80, 52, RadioAction::None);
+		equalizerValues_[i] = label(equalizerPanel_, "", 350, y + 14, 180, radioFont(24), ORANGE);
+		lv_obj_set_style_text_align(equalizerValues_[i], LV_TEXT_ALIGN_CENTER, 0);
+		equalizerPlus_[i] = button(equalizerPanel_, "+", 540, y, 80, 52, RadioAction::None);
+		lv_obj_t* controls[] = {equalizerMinus_[i], equalizerPlus_[i]};
+		for (size_t j = 0; j < 2; ++j) {
+			lv_obj_remove_event_cb(controls[j], onButton);
+			lv_obj_set_user_data(controls[j], reinterpret_cast<void*>(i * 2 + j));
+			lv_obj_add_event_cb(controls[j], onEqualizer, LV_EVENT_CLICKED, this);
+			lv_obj_add_event_cb(controls[j], onEqualizer, LV_EVENT_LONG_PRESSED_REPEAT, this);
+		}
+	}
     lv_obj_set_hidden(equalizerPanel_, true);
     settingsMessage_ = label(settingsOverlay_, "", 28, 376, 744, radioFont(14), ORANGE);
     button(settingsOverlay_, "Vazgeç", 28, 410, 354, 56, RadioAction::CancelSettings);
@@ -655,19 +937,22 @@ void RadioDisplay::configureSettings(const RadioSettings& settings) {
 }
 
 void RadioDisplay::applyScreenSettings(const RadioSettings& settings) {
-    vuEnabled_ = settings.vuMeter;
-    if (vuTrack_) lv_obj_set_hidden(vuTrack_, !vuEnabled_);
-    const bool brightnessChanged = normalBrightness_ != settings.brightness;
-    const bool wasDimmed = dimmed_;
-    normalBrightness_ = settings.brightness;
-    dimSeconds_ = settings.dimSeconds;
-    dimmed_ = false;
-    backlightOff_ = false;
-    dimmedAt_ = 0;
-    if (wasDimmed && wakeOverlay_) lv_obj_set_hidden(wakeOverlay_, true);
-    if (brightnessChanged || wasDimmed)
-        smartdisplay_lcd_set_backlight(normalBrightness_ / 255.0f);
-    lv_display_trigger_activity(display_);
+	vuEnabled_ = settings.vuMeter;
+	if (vuTrack_) lv_obj_set_hidden(vuTrack_, !vuEnabled_);
+	const bool brightnessChanged = normalBrightness_ != settings.brightness;
+	const bool wasDimmed = dimmed_;
+	const bool wasBacklightOff = backlightOff_;
+	normalBrightness_ = settings.brightness;
+	dimSeconds_ = settings.dimSeconds;
+	dimmed_ = false;
+	backlightOff_ = false;
+	dimmedAt_ = 0;
+	if (wasBacklightOff && track_)
+		lv_label_set_long_mode(track_, musicSource_ ? LV_LABEL_LONG_MODE_DOTS : LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
+	if (wasDimmed && wakeOverlay_) lv_obj_set_hidden(wakeOverlay_, true);
+	if (brightnessChanged || wasDimmed)
+		smartdisplay_lcd_set_backlight(normalBrightness_ / 255.0f);
+	lv_display_trigger_activity(display_);
 }
 
 void RadioDisplay::openSettings() {
@@ -733,18 +1018,22 @@ void RadioDisplay::refreshSettingsLabels() {
 }
 
 void RadioDisplay::onEqualizer(lv_event_t* event) {
-    auto* self = static_cast<RadioDisplay*>(lv_event_get_user_data(event));
-    auto* target = static_cast<lv_obj_t*>(lv_event_get_current_target(event));
-    const auto control = reinterpret_cast<uintptr_t>(lv_obj_get_user_data(target));
-    auto& draft = self->draftSettings_;
-    if (control == 6) draft.bass = draft.mid = draft.treble = 0;
-    else if (control < 6) {
-        int8_t* gains[] = {&draft.bass, &draft.mid, &draft.treble};
-        *gains[control / 2] += (control % 2) ? 1 : -1;
-    } else return;
-    draft.validate(self->stationCount_);
-    self->refreshSettingsLabels();
-    self->enqueue(RadioAction::PreviewSettings);
+	auto* self = static_cast<RadioDisplay*>(lv_event_get_user_data(event));
+	auto* target = static_cast<lv_obj_t*>(lv_event_get_current_target(event));
+	const auto control = reinterpret_cast<uintptr_t>(lv_obj_get_user_data(target));
+	auto& draft = self->draftSettings_;
+	if (control == 6) {
+		if (draft.bass == 0 && draft.mid == 0 && draft.treble == 0) return;
+		draft.bass = draft.mid = draft.treble = 0;
+	} else if (control < 6) {
+		int8_t* gains[] = {&draft.bass, &draft.mid, &draft.treble};
+		const int nextGain = static_cast<int>(*gains[control / 2]) + ((control % 2) ? 1 : -1);
+		if (nextGain < -12 || nextGain > 6) return;
+		*gains[control / 2] = static_cast<int8_t>(nextGain);
+	} else return;
+	draft.validate(self->stationCount_);
+	self->refreshSettingsLabels();
+	self->enqueue(RadioAction::PreviewSettings);
 }
 
 void RadioDisplay::onSettingsTab(lv_event_t* event) {
@@ -780,13 +1069,16 @@ void RadioDisplay::finishSettings(bool close, const char* message) {
 }
 
 void RadioDisplay::onWake(lv_event_t* event) {
-    auto* self = static_cast<RadioDisplay*>(lv_event_get_user_data(event));
-    self->dimmed_ = false;
-    self->backlightOff_ = false;
-    self->dimmedAt_ = 0;
-    smartdisplay_lcd_set_backlight(self->normalBrightness_ / 255.0f);
-    lv_obj_set_hidden(self->wakeOverlay_, true);
-    lv_display_trigger_activity(self->display_);
+	auto* self = static_cast<RadioDisplay*>(lv_event_get_user_data(event));
+	const bool wasBacklightOff = self->backlightOff_;
+	self->dimmed_ = false;
+	self->backlightOff_ = false;
+	self->dimmedAt_ = 0;
+	if (wasBacklightOff && self->track_)
+		lv_label_set_long_mode(self->track_, self->musicSource_ ? LV_LABEL_LONG_MODE_DOTS : LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
+	smartdisplay_lcd_set_backlight(self->normalBrightness_ / 255.0f);
+	lv_obj_set_hidden(self->wakeOverlay_, true);
+	lv_display_trigger_activity(self->display_);
 }
 
 void RadioDisplay::buildWifi() {
@@ -909,33 +1201,37 @@ void RadioDisplay::onWifiNetwork(lv_event_t* event) {
 void RadioDisplay::setMusicState(bool source, bool playing, bool paused, size_t index, size_t count,
                                uint32_t elapsed, uint32_t duration, uint8_t repeat, bool shuffle,
                                const String& playingPath, bool canSeek) {
-    if (musicSource_ != source) {
-        setUiText(lv_obj_get_child(sourceButton_, 0), source ? "Radyo" : "SD MP3");
-        setUiText(sourceCaption_, source ? "SES KAYNAĞI" : "İSTASYON");
-        setUiText(lv_obj_get_child(listButton_, 0), source ? LV_SYMBOL_LIST "  Dosya listesi" : LV_SYMBOL_LIST "  İstasyon listesi");
-        lv_obj_set_width(listButton_, source ? 246 : 392);
-        lv_obj_set_hidden(musicPause_, !source);
-        lv_obj_set_width(station_, source ? 196 : 744);
-        // Avoid continuous title animation while playing local MP3 files.
-        lv_label_set_long_mode(track_, source ? LV_LABEL_LONG_MODE_DOTS : LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
-        for (auto* control : {musicRepeatOne_, musicRepeatAll_, musicShuffle_}) lv_obj_set_hidden(control, !source);
-        lv_obj_set_hidden(musicSeekBack_, !source); lv_obj_set_hidden(musicSeekForward_, !source);
-    }
-    musicSource_ = source; musicIndex_ = index; musicCount_ = count;
-    musicElapsed_ = elapsed; musicDuration_ = duration;
-    musicPlayingPath_ = playingPath;
-    lv_obj_set_state(musicSeekBack_, LV_STATE_DISABLED, !canSeek || elapsed == 0);
-    lv_obj_set_state(musicSeekForward_, LV_STATE_DISABLED, !canSeek || duration <= 1 || elapsed >= duration - 1);
-    lv_obj_set_state(musicRepeatOne_, LV_STATE_CHECKED, repeat == 1);
-    lv_obj_set_state(musicRepeatAll_, LV_STATE_CHECKED, repeat == 2);
-    lv_obj_set_state(musicShuffle_, LV_STATE_CHECKED, shuffle);
-    setUiText(lv_obj_get_child(musicPause_, 0), playing && !paused ? LV_SYMBOL_PAUSE " Duraklat" : LV_SYMBOL_PLAY " Oynat");
-    lv_obj_set_state(musicPause_, LV_STATE_DISABLED, count == 0);
-    if (musicList_) {
-        for (size_t i = 0; i < lv_obj_get_child_count(musicList_); ++i)
-            lv_obj_set_state(lv_obj_get_child(musicList_, i), LV_STATE_CHECKED,
-                source && musicPage_ * 5 + i < musicEntries_.size() && musicEntries_[musicPage_ * 5 + i].path == playingPath);
-    }
+	if (musicSource_ != source) {
+		setUiText(lv_obj_get_child(sourceButton_, 0), source ? "Radyo" : "SD MP3");
+		setUiText(sourceCaption_, source ? "SES KAYNAĞI" : "İSTASYON");
+		setUiText(lv_obj_get_child(listButton_, 0), source ? LV_SYMBOL_LIST "  Dosya listesi" : LV_SYMBOL_LIST "  İstasyon listesi");
+		lv_obj_set_width(station_, source ? 196 : 676);
+        lv_obj_set_hidden(favoriteHeart_, source);
+        lv_obj_set_hidden(favoritesButton_, source);
+        if (source) lv_obj_set_hidden(favoritesOverlay_, true);
+		// Avoid continuous title animation while playing local MP3 files or while backlight is off.
+		lv_label_set_long_mode(track_, (source || backlightOff_) ? LV_LABEL_LONG_MODE_DOTS : LV_LABEL_LONG_MODE_SCROLL_CIRCULAR);
+		for (auto* control : {musicRepeatOne_, musicRepeatAll_, musicShuffle_}) lv_obj_set_hidden(control, !source);
+		lv_obj_set_hidden(musicSeekBack_, !source); lv_obj_set_hidden(musicSeekForward_, !source);
+	}
+	musicSource_ = source; musicIndex_ = index; musicCount_ = count;
+	musicElapsed_ = elapsed; musicDuration_ = duration;
+	musicPlayingPath_ = playingPath;
+	lv_obj_set_state(musicSeekBack_, LV_STATE_DISABLED, !canSeek || elapsed == 0);
+	lv_obj_set_state(musicSeekForward_, LV_STATE_DISABLED, !canSeek || duration <= 1 || elapsed >= duration - 1);
+	lv_obj_set_state(musicRepeatOne_, LV_STATE_CHECKED, repeat == 1);
+	lv_obj_set_state(musicRepeatAll_, LV_STATE_CHECKED, repeat == 2);
+	lv_obj_set_state(musicShuffle_, LV_STATE_CHECKED, shuffle);
+	const char* pauseLabel = source ?
+		(playing && !paused ? LV_SYMBOL_PAUSE " Duraklat" : LV_SYMBOL_PLAY " Oynat") :
+		(playing ? LV_SYMBOL_STOP " Durdur" : LV_SYMBOL_PLAY " Oynat");
+	setUiText(lv_obj_get_child(musicPause_, 0), pauseLabel);
+	lv_obj_set_state(musicPause_, LV_STATE_DISABLED, source ? count == 0 : stationCount_ == 0);
+	if (musicList_) {
+		for (size_t i = 0; i < lv_obj_get_child_count(musicList_); ++i)
+			lv_obj_set_state(lv_obj_get_child(musicList_, i), LV_STATE_CHECKED,
+				source && musicPage_ * 5 + i < musicEntries_.size() && musicEntries_[musicPage_ * 5 + i].path == playingPath);
+	}
 }
 
 void RadioDisplay::buildMusic() {

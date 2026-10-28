@@ -10,6 +10,12 @@ font veya harici CDN yüklemesi gerekmez. Web arayüzü şu anda Türkçedir.
 Önceki/sonraki, listeden seçim, ses −/+, sessize alma ve yayını başlatma/durdurma
 kullanılabilir. Durum yaklaşık iki saniyede bir okunur.
 
+API'de `play` yalnızca başlatır/sürdürür; zaten çalan MP3'ü duraklatmaz.
+`pause`, MP3 çalıyorsa duraklatır; zaten duraklamışsa veya durmuşsa başlatmaz.
+Canlı radyoda `pause` bağlantıyı kapatır. `toggle` mevcut durumu tersine çevirir.
+Webdeki tek MP3 düğmesi çalma durumuna göre açıkça `play` veya `pause` gönderir.
+Bu komut ayrımı için yeni cihaz doğrulaması beklenmektedir.
+
 ## İstasyon yönetimi
 
 Ad/URL düzenleme, ekleme/silme, sıralama ve ortak CSV biçiminde içe/dışa aktarma
@@ -25,23 +31,26 @@ Aynı URL korunursa seçili istasyon yeniden eşleştirilir. Ana kayıt başarı
 
 - Yerel HTTP kullanılır; hesap/şifre veya TLS sunulmaz. Güvenilen yerel ağ içindir.
 - Host/Origin denetimi ve CSRF belirteci bulunur; bunlar kullanıcı yetkilendirmesi değildir.
-- Ayarlar/Wi-Fi kurulumu açıkken veya MP3 modunda webden yazma ve kumanda engellenir;
-  durum bilgisi okunabilir. MP3 gezintisi ve uzaktan MP3 kumandası henüz yoktur.
+- Ayarlar/Wi-Fi kurulumu veya OTA güncellemesi sırasında webden yazma ve kumanda engellenir;
+  durum bilgisi okunabilir. SD MP3 modunda uzaktan oynatma/ses kumandası ve **Radyoya dön**
+  komutu kullanılabilir; istasyon listesi kaydı ise engellenir. Webden MP3 klasör gezintisi henüz yoktur.
 - İnternete açma ve port yönlendirme desteklenen kurulumun dışındadır.
-- Tek etkin bağlantı, 2048 bayt başlık, 12 KiB gövde; 3 saniye hareketsizlik ve
-  15 saniye toplam aktarım sınırı uygulanır. Okuma/yazma döngü başına sınırlanır.
+- Tek etkin bağlantı, 2048 bayt başlık, CSV için 12 KiB gövde; normal isteklerde 3 saniye
+  hareketsizlik ve 15 saniye toplam aktarım sınırı (OTA yüklemesinde 15 sn / 180 sn) uygulanır.
 
 ## HTTP uçları
 
 | Yol | Yöntem | İşlem |
 | --- | --- | --- |
 | `/` | GET | Web sayfası |
-| `/api/state` | GET | Durum, liste kimliği ve CSRF belirteci |
+| `/api/state` | GET | Durum, cihaz kimliği, liste kimliği ve CSRF belirteci |
 | `/api/stations` | GET | Kayıtlı CSV ve liste kimliği |
 | `/api/validate` | POST | CSV doğrulama; kayıt yapmaz |
 | `/api/stations` | POST | Kalıcı liste değişimi |
 | `/api/command` | POST | Kumanda komutu |
+| `/api/firmware` | GET | Firmware sürümü, ürün kimliği ve OTA alan kapasitesi |
+| `/api/firmware` | POST | Uygulama `.bin` OTA yüklemesi (`X-Radio-Confirm: update`) |
 
-Komutlar: `volumeDown`, `volumeUp`, `mute`, `previous`, `next`, `play`, `stop`,
-`select:<sıfır-tabanlı-indeks>`. POST için `X-Radio-Token`, seçim/liste kaydı için
+Komutlar: `volumeDown`, `volumeUp`, `mute`, `previous`, `next`, `play`, `pause`, `stop`,
+`radio`, `select:<sıfır-tabanlı-indeks>`. POST için `X-Radio-Token`, seçim/liste kaydı için
 `X-Radio-Revision`, çalan istasyonu çıkarma onayı için `X-Radio-Confirm: stop` kullanılır.

@@ -38,3 +38,19 @@ node_modules/
 /AGENTS.md
 /.tools/
 /station-import-check
+
+# Private signing material and local Android outputs.
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.class
+*.apk
+*.aab
+*.jsonl
+**/local.properties
+**/private/
+**/.gradle/
+**/build/
+**/tests/classes/
+**/AGENTS.md

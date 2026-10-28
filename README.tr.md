@@ -2,13 +2,32 @@
 
 ESP32-S3 üzerinde çalışan; siyah-turuncu dokunmatik arayüzü, Türkçe/İngilizce cihaz menüleri, çevrimdışı SD MP3 oynatıcısı ve yerel web kumandası bulunan internet radyosu.
 
-**Proje kurucusu ve sürdürücüsü: fsadak** · **Firmware: 0.10.0** · **PlatformIO / Arduino**
+**Proje kurucusu ve sürdürücüsü: fsadak** · **Firmware: 0.14.1** · **PlatformIO / Arduino**
 
 [English](README.md) | **Türkçe**
 
 ![Siyah-turuncu radyo arayüzü tasarım önizlemesi](design/tanitim/ana-ekran.png)
 
 *Önceki arayüz tasarımının temsili önizlemesidir; cihaz fotoğrafı veya cihazdan alınmış ekran görüntüsü değildir. Güncel firmware'de ayrıca SD MP3 kontrolleri ve dil seçimi bulunur.*
+
+0.14.1 sürümünde istasyon üst sınırı, favoriler dahil 128'e çıkarılmıştır.
+CSV dosyası sınırı 12 KiB olarak korunmuştur; uzun ad ve adreslerle bu sınıra
+128 kayıttan önce ulaşılabilir. Mevcut 20 KiB NVS alanı ayarlar, Wi-Fi ve favorilerle
+paylaşılır; alan dolarsa kayıt reddedilir ve önceki liste korunur. Bölüm tablosu
+ve kayıt biçimi değiştirilmemiştir. Cihaz doğrulaması beklenmektedir.
+
+## 0.14.1 — batarya entegrasyonu öncesi son SD/MP3 sürümü
+
+Bu sürüm SD/MP3 işlevlerini korur. Batarya ölçümü ve şarj durum ekranı uygulanmış
+değildir. Radyo/batarya çalışmaları ayrı sürümde sürdürülecek; v0.14.1 sabit bir
+etiket olarak kalacaktır. Genel cihaz kullanımı doğrulanmıştır. Bu yayın işlemi
+kapsamında yeni derleme, yükleme veya cihaz testi yapılmamıştır.
+
+Bilinen sınırlar: katalog 12 KiB içinde 128 kayıt kabul eder, ancak web istasyon
+seçimi iki basamaklı sıfır tabanlı indekslerle (0–99) sınırlıdır. Android 0.2.0
+kaynakları en fazla 32 istasyon kabul eder. Korunan sürümde bu davranışlar
+değiştirilmemiştir; sonraki indeksler için cihaz ekranını kullanın. Güç kesintisi
+ve OTA rollback koşulları ayrı doğrulama gerektirir.
 
 ## Özellikler
 
@@ -24,9 +43,26 @@ ESP32-S3 üzerinde çalışan; siyah-turuncu dokunmatik arayüzü, Türkçe/İng
 | Yerel web arayüzü | Radyo kumandası, istasyon düzenleme/sıralama, CSV içe/dışa aktarma ve cihaz durumu |
 | Ekran | Parlaklık ayarı, otomatik karartma, arka ışığı kapatma ve dokunarak uyandırma |
 | VU metre | Yatay dijital seviye çubuğu ve tepe işareti; ayarlardan kapatma; arka ışık kapalıyken ölçüm ve çizimi durdurma |
+| Favoriler | Kalp ile kalıcı seçim; 4 × 2 kutulu, sayfalı ekran; radyo simgesi ve tek satırda en fazla 20 karakterlik ad. Yeni özellik; cihaz doğrulaması bekleniyor. |
 | Açılış | Son radyo/MP3 kaynağını ve son seçilen MP3 dosyasını hatırlama |
 
+İstasyon satırlarında onaylı silme düğmesi bulunur. Başarısız yayın bağlantısında yeniden denemeler sonrasında silme önerilebilir; geçici erişim sorunu kalıcı kapanma sayılmaz. Son istasyon korunur. Yeni cihaz akışları için doğrulama beklenmektedir; [istasyon yönetimi](design/STATION-LISTS.md) belgesini inceleyin.
+
 Başlangıç istasyonu **SomaFM Groove Salad**'dır. İstasyon listesini kendi listenizle değiştirebilirsiniz.
+
+## Android kumanda ve otomatik keşif
+
+`android-app/` klasöründeki Radyo Kumandası 0.2.0 uygulamasında **Radyoları bul** düğmesiyle aynı yerel ağdaki bir veya birden fazla radyoyu listeleyip seçin. Listede bir cihaza basılı tutarak telefonunuzda kullanacağınız adı kaydedin. Son seçilen cihaz hatırlanır; uygulama tekrar öne geldiğinde kimliğiyle yeniden aranır. **IP ile bağlan** seçeneği de kullanılabilir.
+
+Firmware 0.11.0, `_esp32-radio._tcp` DNS-SD servisini TCP 80 üzerinde duyurur. TXT kayıtları `app`, `id`, `model`, `fw` ve `api` alanlarını içerir. Cihaz kimliği Wi-Fi MAC adresinden üretilen 12 haneli değerdir; `/api/state` yanıtında `deviceId` ve `deviceName` alanları bulunur. Host denetimi korunur; uygulama keşfedilen yerel IPv4 adresine bağlanır. Wi-Fi yeniden bağlandığında veya IP değiştiğinde servis yeniden kaydedilir.
+
+Keşif için firmware 0.11.0 veya sonrasını radyonuza yükleyin. Önceki firmware, elle IP girilerek kumanda edilebilir. Telefon ve radyo aynı yerel ağda bulunmalı; misafir ağı/istemci yalıtımı veya mDNS engeli keşfi önleyebilir. Yeni firmware derlenmiştir; fiziksel cihazda keşif ve yayın sırasında çalışma ayrıca doğrulanmalıdır. Kurulum ve test ayrıntıları için [Android kaynak açıklamasını](android-app/README.md) inceleyin.
+
+## Web üzerinden firmware güncelleme
+
+Firmware **0.12.0** ile sayfanın altındaki **Firmware güncelleme** alanından uygulama dosyası yükleyebilirsiniz. Bu ilk OTA sürümünü bir kez USB ile yükleyin; sonraki sürümlerde .pio/build/esp32_radio/firmware.bin dosyasını webden seçip onaylayın. Yükleme sırasında oynatma durur; dosya kullanılmayan uygulama alanına yazılıp doğrulanır ve cihaz yeniden başlar. İlerleme ve yeniden bağlantı web sayfasında gösterilir. Bölüm/NVS düzeni korunmuştur; APK güncellemesi gerekmez. Ayrıntılar için [OTA yönergelerini](OTA_GUNCELLEME.md) inceleyin.
+
+OTA başında 3 saniyelik sabit uyarı gösterilir; flash yazımı boyunca arka ışık kapalı tutulur ve ilerleme tarayıcıda izlenir. Başarılı doğrulama ve açılış bölümü seçimi sonrasında tamamlanma mesajı gösterilir; ardından cihaz yeniden başlar. Hata durumunda ekran normal parlaklığa döner. Başlangıç/başarı mesajları dahil başarılı OTA akışı fiziksel kartta doğrulanmıştır; kesinti ve rollback senaryoları ayrıca doğrulanmalıdır.
 
 ## Donanım
 
@@ -137,7 +173,7 @@ Groove Salad;https://ice5.somafm.com/groovesalad-128-mp3
 
 | Sınır | Değer |
 | --- | ---: |
-| Cihazda saklanan istasyon | 32 |
+| Cihazda saklanan istasyon | CSV boyut sınırı içinde en fazla 128 |
 | CSV dosyası | 12 KiB |
 | İstasyon adı | 96 bayt |
 | Yayın adresi | 512 bayt |
@@ -168,8 +204,8 @@ Mevcut web arayüzü radyo kumandası, ses/sessize alma, istasyon seçimi, istas
 **Mevcut kapsam sınırları:**
 
 - Web arayüzü şu anda **yalnızca Türkçe**; cihaz dili seçimi web sayfasını değiştirmez.
-- Cihaz ayarları/Wi-Fi kurulumu açıkken ve SD MP3 kaynağında webden değişiklik engellenir. Durum bilgisi okunabilir.
-- Webden MP3 gezintisi, dosya yükleme ve MP3 kumandası henüz yoktur.
+- Cihaz ayarları/Wi-Fi kurulumu açıkken webden değişiklik engellenir. SD MP3 kaynağında uzaktan oynatma/ses kumandası ve Radyo kaynağına geçiş kullanılabilir; istasyon listesi kaydı ise engellenir.
+- Webden MP3 klasör gezintisi ve MP3 dosyası yükleme henüz yoktur.
 - Sunucu yerel HTTP kullanır; giriş hesabı/şifre ve TLS yoktur. Güvenilen yerel ağ için tasarlanmıştır; internete açma ve port yönlendirme desteklenen kurulumun dışındadır.
 
 ## Ekran ve ses ayarları
@@ -197,12 +233,11 @@ Son radyo/MP3 kaynağı hatırlanır. Radyonun açılışı otomatik yayın/ista
 ## Yol haritası
 
 - İngilizce desteği ve daha fazla cihaz kumandasıyla web arayüzünü yeniden tasarlamak.
-- Yerel web arayüzünden OTA firmware güncellemesini geliştirmek; henüz uygulanmamıştır.
 - Tüm listeyi değiştirmenin yanında birleştirme/sona ekleme sunmak.
-- Ağ, depolama, hata koşulları ve uzun süreli kullanım testlerini sürdürmek.
+- Ağ, depolama, hata koşulları, uzun süreli kullanım ve fiziksel cihazda web OTA güncelleme/rollback testlerini sürdürmek.
 - Sonraki donanım aşaması: **1S2P düzende iki adet 3200 mAh 18650**, UPS besleme ve harici durum LED'leri. Bu bir plandır; kurulmuş veya test edilmiş batarya sistemi değildir. Ekranda pil göstergesi şimdilik kapsam dışıdır.
 
-Klasör gezintisi, ±10 saniye sarma, son kaynak/dosya kaydı ve Türkçe/İngilizce cihaz menüleri uygulanmıştır. MP3'ün kayıtlı zaman konumundan devam etmesi açık iş değildir; bu gereksinim iptal edilmiştir.
+Klasör gezintisi, ±10 saniye sarma, son kaynak/dosya kaydı, Türkçe/İngilizce cihaz menüleri ve yerel web üzerinden OTA firmware yükleme uygulanmıştır. MP3'ün kayıtlı zaman konumundan devam etmesi açık iş değildir; bu gereksinim iptal edilmiştir.
 
 ## Proje yapısı ve belgeler
 
@@ -225,6 +260,7 @@ Ayrıntılı mühendislik notları ağırlıklı olarak Türkçedir:
 - [Ayarlar](design/SETTINGS.md)
 - [Web arayüzü](design/WEB-INTERFACE.md)
 - [Batarya planı — ertelenen donanım işi](design/BATTERY-POWER.md)
+- [Favoriler](design/FAVORITES.md)
 - [Yol haritası](design/TODO.md)
 
 Üretilmiş font kaynakları projededir; yeniden üretim notları [design/fonts](design/fonts) altındadır.

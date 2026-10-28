@@ -2,10 +2,13 @@
 #include <WiFi.h>
 #include <Audio.h>
 #include "RadioDisplay.h"
+#include "StationFavorites.h"
 #include "SdDiagnostics.h"
 #include "SdStationImport.h"
 #include "RadioWeb.h"
 #include "RadioWifi.h"
+#include "RadioDiscovery.h"
+#include "RadioOta.h"
 #include "SdMusicFiles.h"
 #include "PlaybackResume.h"
 #include "RadioLanguage.h"
@@ -18,11 +21,12 @@ constexpr uint8_t I2S_BCLK = 0;
 constexpr uint8_t I2S_LRC = 18;
 constexpr uint8_t I2S_DOUT = 17;
 
-// Son denediğin seviye. Gerektiğinde buradan düşürebilirsin.
+// Default volume; saved preferences are applied during startup.
 uint8_t volume = 11;
 bool muted = false;
 
 StationStore stations;
+StationFavorites stationFavorites;
 size_t currentStation = 0;
 bool audioReady = false;
 RadioSettings settings;
@@ -96,7 +100,10 @@ void serviceVu() {
 }
 
 RadioWeb radioWeb;
+RadioOta radioOta;
+bool otaMode = false;
 RadioWifi network;
+RadioDiscovery radioDiscovery;
 bool lastWifiConnected = false;
 bool sdMode = false, sdActive = false, sdPaused = false, sdEofPending = false;
 std::vector<String> musicFiles;
@@ -131,6 +138,12 @@ uint32_t streamReadyAt = 0;
 constexpr uint8_t MAX_STREAM_RETRIES = 3;
 bool screenReady = false;
 bool screenDirty = true;
+bool stationDeletePending = false;
+String stationDeleteUrl;
+uint32_t stationDeleteIdentity = 0;
+bool failedStationPromptPending = false;
+String failedStationPromptUrl;
+void requestStationDeletion(size_t index, bool unavailable);
 
 String stationName = "Groove Salad";
 String trackTitle;
@@ -214,17 +227,17 @@ void serviceStreamDetails() {
 }
 
 void drawScreen() {
-    if (!screenReady) {
-        return;
-    }
-    screen.setMusicState(sdMode, sdActive, sdPaused, currentMusic, musicFiles.size(),
-                         sdElapsed, sdDuration, static_cast<uint8_t>(sdRepeat), sdShuffle,
-                         currentMusic < musicFiles.size() ? musicFiles[currentMusic] : sourceResume.path,
-                         sdActive && sdDuration > 0 && audio.getBitRate(true) > 0);
-    screen.update(sdMode ? uiText("SD KART") : stationName, trackIsStatus ? uiText(trackTitle) : trackTitle, statusText, streamGenre, streamFormat,
-                  WiFi.status() == WL_CONNECTED,
-                  volume, muted, currentStation);
-    screenDirty = false;
+	if (!screenReady) {
+		return;
+	}
+	screen.setMusicState(sdMode, sdMode ? sdActive : (playbackRequested || radioStarted), sdPaused, currentMusic, musicFiles.size(),
+	                     sdElapsed, sdDuration, static_cast<uint8_t>(sdRepeat), sdShuffle,
+	                     currentMusic < musicFiles.size() ? musicFiles[currentMusic] : sourceResume.path,
+	                     sdActive && sdDuration > 0 && audio.getBitRate(true) > 0);
+	screen.update(stationName, trackTitle, statusText, streamGenre, streamFormat,
+	              WiFi.status() == WL_CONNECTED,
+	              volume, muted, currentStation, trackIsStatus);
+	screenDirty = false;
 }
 
 // Bildirimlerde yalnızca metinleri güncelliyoruz.
@@ -336,6 +349,10 @@ void scheduleStreamRetry(const String& reason, bool retryable) {
         playbackRequested = false;
         statusText = reason + "; listeden yeniden seçin";
         trackTitle = "Yayın başlatılamadı"; trackIsStatus = true;
+        if (!sdMode && WiFi.status() == WL_CONNECTED && currentStation < stations.count()) {
+            failedStationPromptUrl = stations[currentStation].url;
+            failedStationPromptPending = true;
+        }
     } else {
         const uint32_t delays[] = {3000, 10000, 30000};
         const uint32_t waitMs = delays[retryAttempt];
@@ -349,52 +366,54 @@ void scheduleStreamRetry(const String& reason, bool retryable) {
 
 // Network operations are performed outside LVGL event callbacks.
 void startStation(size_t index, bool automaticRetry = false) {
-    if (index >= stations.count()) return;
-    if (sdMode) {
-        updateSdTime(true);
-        if (audioReady) audio.disconnectStream();
-        sdMode = sdActive = sdPaused = sdEofPending = false;
-    }
-    if (!automaticRetry && index == currentStation && radioStarted &&
-        audio.isRunning() && !httpFailurePending) return;
-    if (!automaticRetry) {
-        retryAttempt = 0;
-        markPlaybackChanged();
-    }
-    playbackRequested = true;
-    retryPending = false;
-    httpFailurePending = false;
-    httpFailureCode = 0;
-    httpFailureRetryable = false;
-    streamReady = false;
-    clearStreamDetails();
-    currentStation = index;
-    stationName = stations[index].name;
-    if (!automaticRetry) persistSourceState(true);
-    trackTitle = "";
-    screenDirty = true;
-    if (!audioReady || WiFi.status() != WL_CONNECTED) {
-        radioStarted = false;
-        if (audioReady) scheduleStreamRetry("Wi-Fi bekleniyor", true);
-        return;
-    }
+	if (index >= stations.count()) return;
+	if (sdMode) {
+		updateSdTime(true);
+		if (audioReady) audio.disconnectStream();
+		sdMode = sdActive = sdPaused = sdEofPending = false;
+	}
+	if (!automaticRetry && index == currentStation && radioStarted &&
+	    audio.isRunning() && !httpFailurePending) return;
+	if (audioReady) audio.disconnectStream();
+	if (!automaticRetry) {
+		failedStationPromptPending = false;
+		retryAttempt = 0;
+		markPlaybackChanged();
+	}
+	playbackRequested = true;
+	retryPending = false;
+	httpFailurePending = false;
+	httpFailureCode = 0;
+	httpFailureRetryable = false;
+	streamReady = false;
+	clearStreamDetails();
+	currentStation = index;
+	stationName = stations[index].name;
+	if (!automaticRetry) persistSourceState(true);
+	trackTitle = "";
+	screenDirty = true;
+	if (!audioReady || WiFi.status() != WL_CONNECTED) {
+		radioStarted = false;
+		if (audioReady) scheduleStreamRetry("Wi-Fi bekleniyor", true);
+		return;
+	}
 
-    radioStarted = false;
-    audio.stopSong();
-    statusText = "Yayın açılıyor...";
-    drawScreen();
-    screen.present();
-    radioStarted = audio.connecttohost(stations[index].url);
-    connectionStartedAt = millis();
-    audio.setVolume(muted ? 0 : volume);
-    if (!radioStarted) {
-        Serial.println("HATA: Radyo baglantisi baslatilamadi.");
-        scheduleStreamRetry("Yayın bağlantısı kurulamadı", true);
-    }
-    screenDirty = true;
+	radioStarted = false;
+	statusText = "Yayın açılıyor...";
+	drawScreen();
+	screen.present();
+	radioStarted = audio.connecttohost(stations[index].url);
+	connectionStartedAt = millis();
+	audio.setVolume(muted ? 0 : volume);
+	if (!radioStarted) {
+		Serial.println("HATA: Radyo baglantisi baslatilamadi.");
+		scheduleStreamRetry("Yayın bağlantısı kurulamadı", true);
+	}
+	screenDirty = true;
 }
 
 void serviceStreamConnection() {
+    if (stationDeletePending) return;
     if (sdMode || !audioReady || !playbackRequested) return;
     if (radioStarted) {
         if (httpFailurePending) {
@@ -551,22 +570,29 @@ void toggleSdPause() {
 }
 
 void serviceSdMusic() {
-    if (!sdMode || !sdActive) return;
-    updateSdTime();
-    if (millis() - sdCardCheckAt >= 2000 || sdEofPending) {
-        sdCardCheckAt = millis();
-        if (!sdCardReadable()) { stopSdMusic("SD kart çıkarıldı veya okunamadı."); return; }
-    }
-    if (sdPaused) return;
-    if (sdEofPending) {
-        sdEofPending = false;
-        advanceSdMusic(false, true);
-        return;
-    }
-    if (!audio.isRunning()) { stopSdMusic("MP3 çalınamadı; başka dosya seçin."); return; }
-    const uint32_t position = audio.getFilePos();
-    if (position != sdLastPosition) { sdLastPosition = position; sdProgressAt = millis(); }
-    else if (millis() - sdProgressAt >= 30000) stopSdMusic("Dosya okunması ilerlemiyor; SD kartı kontrol edin.");
+	if (!sdMode || !sdActive) return;
+	updateSdTime();
+	const uint32_t now = millis();
+	if (!sdPaused && !sdEofPending && audio.isRunning()) {
+		const uint32_t position = audio.getFilePos();
+		if (position != sdLastPosition) {
+			sdLastPosition = position;
+			sdProgressAt = sdCardCheckAt = now;
+			return;
+		}
+	}
+	if (now - sdCardCheckAt >= 2000 || sdEofPending) {
+		sdCardCheckAt = now;
+		if (!sdCardReadable()) { stopSdMusic("SD kart çıkarıldı veya okunamadı."); return; }
+	}
+	if (sdPaused) return;
+	if (sdEofPending) {
+		sdEofPending = false;
+		advanceSdMusic(false, true);
+		return;
+	}
+	if (!audio.isRunning()) { stopSdMusic("MP3 çalınamadı; başka dosya seçin."); return; }
+	if (now - sdProgressAt >= 30000) stopSdMusic("Dosya okunması ilerlemiyor; SD kartı kontrol edin.");
 }
 
 void browseMusicFolder(const String& folder) {
@@ -622,37 +648,37 @@ void seekSdMusic(int delta) {
     screenDirty = true;
 }
 
-void restoreSdPlayback() {
-    sdMode = true; streamFormat = "MP3";
-    trackTitle = sourceResume.path.substring(sourceResume.path.lastIndexOf('/') + 1);
-    trackIsStatus = false;
-    if (trackTitle.endsWith(".mp3") || trackTitle.endsWith(".MP3")) trackTitle.remove(trackTitle.length() - 4);
-    musicFolder = sdParentFolder(sourceResume.path);
-    String error;
-    if (!listSdMusicFolder(musicFolder, musicEntries, error, true, serviceSdAudio)) {
-        statusText = "Son MP3 açılamadı; SD kartı kontrol edin.";
-        screenDirty = true; return;
-    }
-    bool found = false;
-    for (const auto& entry : musicEntries) if (!entry.directory) {
-        if (entry.path == sourceResume.path) { currentMusic = musicFiles.size(); found = true; }
-        musicFiles.push_back(entry.path);
-    }
-    if (!found) {
-        musicFiles.clear(); statusText = "Son MP3 bulunamadı; listeden dosya seçin.";
-        screenDirty = true; return;
-    }
-    File probe = SD.open(sourceResume.path, FILE_READ);
-    const bool readable = probe && !probe.isDirectory() && probe.size();
-    probe.close();
-    if (!readable) {
-        musicFiles.clear(); statusText = "Son MP3 okunamadı; dosya seçin.";
-        screenDirty = true; return;
-    }
-    restoringPlayback = true;
-    startSdMusic(currentMusic);
-    restoringPlayback = false;
-    if (sdActive) persistSourceState(true);
+void restoreSdPlayback(bool sdMounted = false) {
+	sdMode = true; streamFormat = "MP3";
+	trackTitle = sourceResume.path.substring(sourceResume.path.lastIndexOf('/') + 1);
+	trackIsStatus = false;
+	if (trackTitle.endsWith(".mp3") || trackTitle.endsWith(".MP3")) trackTitle.remove(trackTitle.length() - 4);
+	musicFolder = sdParentFolder(sourceResume.path);
+	String error;
+	if (!listSdMusicFolder(musicFolder, musicEntries, error, !sdMounted, serviceSdAudio)) {
+		statusText = "Son MP3 açılamadı; SD kartı kontrol edin.";
+		screenDirty = true; return;
+	}
+	bool found = false;
+	for (const auto& entry : musicEntries) if (!entry.directory) {
+		if (entry.path == sourceResume.path) { currentMusic = musicFiles.size(); found = true; }
+		musicFiles.push_back(entry.path);
+	}
+	if (!found) {
+		musicFiles.clear(); statusText = "Son MP3 bulunamadı; listeden dosya seçin.";
+		screenDirty = true; return;
+	}
+	File probe = SD.open(sourceResume.path, FILE_READ);
+	const bool readable = probe && !probe.isDirectory() && probe.size();
+	probe.close();
+	if (!readable) {
+		musicFiles.clear(); statusText = "Son MP3 okunamadı; dosya seçin.";
+		screenDirty = true; return;
+	}
+	restoringPlayback = true;
+	startSdMusic(currentMusic);
+	restoringPlayback = false;
+	if (sdActive) persistSourceState(true);
 }
 
 // Only recalculate filters when a band changes; unrelated UI previews leave DSP alone.
@@ -685,10 +711,108 @@ void openWifiSetup() {
     screen.updateWifi(network.message(), network.busy(), network.scanning());
 }
 
+void requestStationDeletion(size_t index, bool unavailable) {
+    if (index >= stations.count() || stationDeletePending || settingsEditing ||
+        network.setupOpen() || otaMode || sdMode) return;
+    stationDeletePending = true;
+    stationDeleteUrl = stations[index].url;
+    stationDeleteIdentity = stations.identity();
+    failedStationPromptPending = false;
+    screen.showStationDelete(stations[index].name, unavailable, stations.count() > 1);
+}
+
+void serviceFailedStationPrompt() {
+    if (!failedStationPromptPending) return;
+    if (sdMode || WiFi.status() != WL_CONNECTED || currentStation >= stations.count() ||
+        failedStationPromptUrl != stations[currentStation].url) {
+        failedStationPromptPending = false;
+        return;
+    }
+    if (!settingsEditing && !network.setupOpen() && !otaMode && !stationDeletePending)
+        requestStationDeletion(currentStation, true);
+}
+
+void confirmStationDeletion() {
+    if (!stationDeletePending) return;
+    if (stations.identity() != stationDeleteIdentity) {
+        screen.showStationDeleteError("İstasyon listesi değişti. Vazgeç ile kapatıp yeniden seçin.");
+        return;
+    }
+    if (stations.count() <= 1) {
+        screen.showStationDeleteError("Son istasyon silinemez. Önce başka bir istasyon ekleyin.");
+        return;
+    }
+    size_t removing = stations.count();
+    for (size_t i = 0; i < stations.count(); ++i)
+        if (stationDeleteUrl == stations[i].url) { removing = i; break; }
+    if (removing == stations.count()) {
+        screen.showStationDeleteError("İstasyon listesi değişti. Vazgeç ile kapatıp yeniden seçin.");
+        return;
+    }
+    const std::string playingUrl = stations[currentStation].url;
+    const std::string bootUrl = stations[settings.bootStation].url;
+    const bool removedCurrent = stationDeleteUrl == playingUrl.c_str();
+    std::vector<StationRecord> candidate;
+    for (size_t i = 0; i < stations.count(); ++i)
+        if (i != removing) candidate.push_back({stations[i].name, stations[i].url});
+    size_t selected = 0, boot = 0;
+    for (size_t i = 0; i < candidate.size(); ++i) {
+        if (candidate[i].url == playingUrl) selected = i;
+        if (candidate[i].url == bootUrl) boot = i;
+    }
+    if (removedCurrent) selected = removing < candidate.size() ? removing : candidate.size() - 1;
+    String error;
+    serviceSdAudio();
+    if (!stations.replace(candidate, error)) {
+        screen.showStationDeleteError(error);
+        return; // Keep the confirmation and current playback intact on failure.
+    }
+    currentStation = selected;
+    if (removedCurrent) {
+        if (audioReady) audio.disconnectStream();
+        playbackRequested = radioStarted = streamReady = false;
+        retryPending = httpFailurePending = false;
+        clearStreamDetails();
+        trackTitle = ""; trackIsStatus = false;
+        statusText = "İstasyon silindi; başka bir istasyon seçin.";
+    }
+    stationName = stations[currentStation].name;
+    refreshStreamGenre();
+    settings.bootStation = boot;
+    previewSettings = settings;
+    setStationSettingsIdentity(stations.identity());
+    const bool configSaved = saveRadioSettings(settings);
+    const bool playbackSaved = saveLastPlayback(volume, currentStation);
+    playbackDirty = !playbackSaved; playbackChangedAt = millis();
+    screen.setStations(stations.data(), stations.count());
+    screen.setFavorites(stationFavorites.mask(stations.data(), stations.count()));
+    screen.configureSettings(settings);
+    stationDeletePending = failedStationPromptPending = false;
+    stationDeleteUrl = "";
+    screen.closeStationDelete(true);
+    if (!configSaved || !playbackSaved)
+        statusText = "Liste kaydedildi; açılış tercihleri tamamen kaydedilemedi. Yeniden açılışta ilk istasyon kullanılabilir.";
+    screenDirty = true;
+    drawScreen();
+}
+
 // Both touch and HTTP commands enter here, always on the main loop.
 void processCommand(const RadioCommand& command) {
+    if (stationDeletePending && command.action != RadioAction::ConfirmDeleteStation &&
+        command.action != RadioAction::CancelDeleteStation) return;
     bool changed = false;
         switch (command.action) {
+        case RadioAction::RequestDeleteStation:
+            requestStationDeletion(command.stationIndex, false);
+            break;
+        case RadioAction::CancelDeleteStation:
+            stationDeletePending = false;
+            stationDeleteUrl = "";
+            screen.closeStationDelete();
+            break;
+        case RadioAction::ConfirmDeleteStation:
+            confirmStationDeletion();
+            break;
         case RadioAction::ToggleRepeatOne:
             if (sdMode) { sdRepeat = sdRepeat == SdRepeat::One ? SdRepeat::Off : SdRepeat::One; screenDirty = true; }
             break;
@@ -709,17 +833,28 @@ void processCommand(const RadioCommand& command) {
         case RadioAction::MusicParent:
             browseMusicFolder(sdParentFolder(musicFolder));
             break;
-        case RadioAction::MusicSeekBack:
-            seekSdMusic(-10);
-            break;
-        case RadioAction::MusicSeekForward:
-            seekSdMusic(10);
-            break;
-        case RadioAction::ToggleMusicPause:
-            if (sdMode) toggleSdPause();
-            changed = true;
-            break;
-        case RadioAction::SwitchRadio:
+		case RadioAction::MusicSeekBack:
+			seekSdMusic(-10);
+			break;
+		case RadioAction::MusicSeekForward:
+			seekSdMusic(10);
+			break;
+		case RadioAction::ToggleMusicPause:
+			if (sdMode) {
+				toggleSdPause();
+			} else if (playbackRequested || radioStarted) {
+				if (audioReady) audio.disconnectStream();
+				playbackRequested = radioStarted = streamReady = false;
+				retryPending = httpFailurePending = false;
+				clearStreamDetails();
+				trackTitle = "";
+				statusText = "Yayın durduruldu";
+			} else {
+				startStation(currentStation);
+			}
+			changed = true;
+			break;
+		case RadioAction::SwitchRadio:
             startStation(currentStation);
             changed = true;
             break;
@@ -746,6 +881,19 @@ void processCommand(const RadioCommand& command) {
             muted = false;
             changed = true;
             break;
+        case RadioAction::ToggleFavorite: {
+            if (sdMode || currentStation >= stations.count()) break;
+            String error;
+            if (stationFavorites.toggle(stations.data(), stations.count(), currentStation, error)) {
+                screen.setFavorites(stationFavorites.mask(stations.data(), stations.count()));
+            } else {
+                statusText = error;
+            }
+            // No volume/source change or secondary playback/settings write.
+            screenDirty = true;
+            drawScreen();
+            break;
+        }
         case RadioAction::VolumeUp:
             if (volume < (settingsEditing ? previewSettings.maxVolume : settings.maxVolume)) ++volume;
             muted = false;
@@ -808,6 +956,7 @@ void processCommand(const RadioCommand& command) {
             const bool playbackSaved = saveLastPlayback(settingsEditing ? volumeBeforeSettings : volume, currentStation);
             playbackDirty = !playbackSaved; playbackChangedAt = millis();
             screen.setStations(stations.data(), stations.count());
+            screen.setFavorites(stationFavorites.mask(stations.data(), stations.count()));
             screen.configureSettings(settings);
             screen.setVolumeLimit(settingsEditing ? previewSettings.maxVolume : settings.maxVolume);
             stationName = stations[0].name;
@@ -899,7 +1048,15 @@ void processCommand(const RadioCommand& command) {
             else startStation(currentStation);
             changed = true;
             break;
+        case RadioAction::PausePlayback:
+            if (sdMode) {
+                if (sdActive && !sdPaused) { toggleSdPause(); changed = true; }
+                break;
+            }
+            // A live radio cannot retain a paused position; pause closes it.
+            // Fall through to StopPlayback without starting an idle station.
         case RadioAction::StopPlayback:
+            failedStationPromptPending = false;
             if (sdMode) { stopSdMusic("Durduruldu"); changed = true; break; }
             if (audioReady) audio.disconnectStream();
             playbackRequested = radioStarted = streamReady = false;
@@ -922,7 +1079,7 @@ void processCommand(const RadioCommand& command) {
 
 void processCommands() {
     RadioCommand command;
-    while (screen.takeCommand(command)) processCommand(command);
+    while (screen.takeCommand(command)) if (!otaMode) processCommand(command);
 }
 
 std::vector<StationRecord> webStationRecords() {
@@ -935,6 +1092,66 @@ std::vector<StationRecord> webStationRecords() {
 void webMessage(RadioWeb& web, int status, const std::string& message, const char* code = "") {
     web.reply(status, "application/json; charset=utf-8",
         "{\"message\":" + radioJson(message) + ",\"code\":" + radioJson(code) + "}");
+}
+
+void finishOtaFailure(const char* reason = nullptr) {
+	otaMode = false;
+	trackTitle = "";
+	trackIsStatus = false;
+	statusText = reason ? String(reason) : (radioOta.error().empty() ?
+		String("Güncelleme kesildi. Yeniden deneyin; oynatmayı Başlat ile sürdürün.") : String(radioOta.error().c_str()));
+	screen.endOta();
+	screenDirty = true;
+	drawScreen();
+}
+
+bool handleFirmwareUpload(RadioWeb& web, RadioWeb::Upload phase, const uint8_t* data, size_t size) {
+	if (phase == RadioWeb::Upload::Begin) {
+		if (otaMode || settingsEditing || network.setupOpen() || stationDeletePending) {
+			webMessage(web, 409, "Güncelleme başlamadı. Cihazdaki ayarları kapatın veya süren güncellemeyi bekleyin.");
+			return false;
+		}
+		if (web.contentLength() < 288 || web.contentLength() > radioOta.capacity()) {
+			webMessage(web, 400, "Firmware boyutu uygun değil veya OTA alanı bulunamadı.");
+			return false;
+		}
+		audio.disconnectStream();
+		radioStarted = streamReady = playbackRequested = false;
+		sdActive = sdPaused = sdEofPending = false;
+		retryPending = httpFailurePending = false;
+		otaMode = true;
+		trackTitle = "Firmware güncellemesi"; trackIsStatus = true;
+		statusText = "Firmware yükleniyor: %0";
+		screen.showOtaNotice(false);
+		web.deferUpload(3000); // Return to the main loop; TCP naturally back-pressures.
+		return true;
+	}
+	if (phase == RadioWeb::Upload::Abort) {
+		radioOta.abort();
+		if (otaMode && !radioOta.pendingRestart())
+			finishOtaFailure("Güncelleme kesildi. Yeniden deneyin; oynatmayı Başlat ile sürdürün.");
+		return false;
+	}
+	if (phase == RadioWeb::Upload::Data && !radioOta.active()) {
+		// The notice has been visible for three seconds. All flash operations
+		// start only after the backlight is off, including NVS persistence.
+		screen.beginOta();
+		if (!radioOta.begin(web.contentLength())) {
+			webMessage(web, 400, radioOta.error());
+			finishOtaFailure();
+			return false;
+		}
+		persistSourceState(true);
+		saveLastPlayback(volume, currentStation);
+	}
+	const bool ok = phase == RadioWeb::Upload::Data ? radioOta.write(data, size) : radioOta.finish();
+	if (!ok) { webMessage(web, 400, radioOta.error()); finishOtaFailure(); return false; }
+	if (phase == RadioWeb::Upload::End) {
+		statusText = "Güncelleme doğrulandı. Yeniden başlatılıyor...";
+		screen.showOtaNotice(true); // esp_ota_end/set_boot_partition have finished.
+		webMessage(web, 200, "Firmware doğrulandı. Cihaz yeniden başlatılıyor.");
+	}
+	return true;
 }
 
 // Saved indices are remapped by URL; an unchanged playing stream stays open.
@@ -978,6 +1195,7 @@ void saveWebStations(RadioWeb& web, const std::vector<StationRecord>& candidate)
     const bool playbackSaved = saveLastPlayback(volume, currentStation);
     playbackDirty = !playbackSaved; playbackChangedAt = millis();
     screen.setStations(stations.data(), stations.count());
+    screen.setFavorites(stationFavorites.mask(stations.data(), stations.count()));
     screen.configureSettings(settings);
     screenDirty = true; drawScreen();
     webMessage(web, 200, configSaved && playbackSaved ? "Liste cihaza kaydedildi." :
@@ -985,99 +1203,115 @@ void saveWebStations(RadioWeb& web, const std::vector<StationRecord>& candidate)
 }
 
 void handleWebRequest(RadioWeb& web) {
-    if (web.method == "GET" && web.path == "/") { web.replyPage(); return; }
-    if (web.method == "GET" && web.path == "/api/state") {
-        std::string result = "{\"version\":" + radioJson(RADIO_VERSION) +
-            ",\"token\":" + radioJson(web.token().c_str()) +
-            ",\"revision\":" + radioJson(std::to_string(stations.identity())) +
-            ",\"source\":" + radioJson(sdMode ? "sd" : "radio") +
-            ",\"station\":" + radioJson(sdMode ? "SD KART" : stationName.c_str()) +
-            ",\"track\":" + radioJson(trackTitle.c_str()) +
-            ",\"status\":" + radioJson(statusText.c_str()) +
-            ",\"genre\":" + radioJson(streamGenre.c_str()) +
-            ",\"format\":" + radioJson(streamFormat.c_str()) +
-            ",\"volume\":" + std::to_string(volume) +
-            ",\"maxVolume\":" + std::to_string(settings.maxVolume) +
-            ",\"muted\":" + (muted ? "true" : "false") +
-            ",\"playing\":" + ((sdMode ? sdActive && !sdPaused : radioStarted) ? "true" : "false") +
-            ",\"editing\":" + ((settingsEditing || network.setupOpen() || sdMode) ? "true" : "false") +
-            ",\"current\":" + std::to_string(currentStation) + ",\"stations\":[";
-        for (size_t i = 0; i < stations.count(); ++i) {
-            if (i) result += ',';
-            result += radioJson(stations[i].name);
-        }
-        web.reply(200, "application/json; charset=utf-8", result + "]}"); return;
-    }
-    if (web.method == "GET" && web.path == "/api/stations") {
-        web.reply(200, "application/json; charset=utf-8",
-            "{\"revision\":" + radioJson(std::to_string(stations.identity())) +
-            ",\"csv\":" + radioJson(writeStationCsv(webStationRecords())) + "}"); return;
-    }
-    if (web.method != "POST") { webMessage(web, 404, "Adres bulunamadı."); return; }
-    if (sdMode) {
-        webMessage(web, 409, "SD müzik modunda kumandayı cihaz ekranından kullanın. Webden değişiklik için Radyo kaynağına dönün."); return;
-    }
-    if (settingsEditing || network.setupOpen()) {
-        webMessage(web, 409, "Cihazda ayarlar açık. Önce cihazdaki Kaydet veya Vazgeç ile menüyü kapatın."); return;
-    }
-    if (web.path == "/api/validate" || web.path == "/api/stations") {
-        std::vector<StationRecord> candidate; std::string error;
-        if (!parseStationCsv(web.body, candidate, error)) { webMessage(web, 400, error); return; }
-        if (web.path == "/api/validate")
-            web.reply(200, "application/json; charset=utf-8", "{\"csv\":" + radioJson(writeStationCsv(candidate)) + "}");
-        else saveWebStations(web, candidate);
-        return;
-    }
-    if (web.path == "/api/command") {
-        RadioCommand command;
-        if (web.body == "volumeDown") command.action = RadioAction::VolumeDown;
-        else if (web.body == "volumeUp") command.action = RadioAction::VolumeUp;
-        else if (web.body == "mute") command.action = RadioAction::ToggleMute;
-        else if (web.body == "previous") command.action = RadioAction::PreviousStation;
-        else if (web.body == "next") command.action = RadioAction::NextStation;
-        else if (web.body == "play") command.action = RadioAction::StartPlayback;
-        else if (web.body == "stop") command.action = RadioAction::StopPlayback;
-        else if (web.body.compare(0, 7, "select:") == 0) {
-            if (web.revision != std::to_string(stations.identity())) {
-                webMessage(web, 409, "İstasyon listesi değişti; sayfanın yenilenmesini bekleyin."); return;
-            }
-            const std::string index = web.body.substr(7);
-            if (index.empty() || index.size() > 2) { webMessage(web, 400, "Geçersiz istasyon."); return; }
-            size_t selected = 0;
-            for (char c : index) {
-                if (c < '0' || c > '9') { webMessage(web, 400, "Geçersiz istasyon."); return; }
-                selected = selected * 10 + c - '0';
-            }
-            if (selected >= stations.count()) { webMessage(web, 400, "İstasyon bulunamadı."); return; }
-            command.action = RadioAction::SelectStation; command.stationIndex = selected;
-        } else { webMessage(web, 400, "Bilinmeyen kumanda komutu."); return; }
-        processCommand(command);
-        webMessage(web, 200, "Komut uygulandı."); return;
-    }
-    webMessage(web, 404, "Adres bulunamadı.");
+	if (web.method == "GET" && web.path == "/api/firmware") {
+		web.reply(200, "application/json; charset=utf-8",
+			"{\"version\":" + radioJson(RADIO_VERSION) + ",\"product\":" + radioJson(RADIO_FIRMWARE_ID) +
+			",\"maxSize\":" + std::to_string(radioOta.capacity()) + "}"); return;
+	}
+	if (web.method == "GET" && web.path == "/") { web.replyPage(); return; }
+	if (web.method == "GET" && web.path == "/api/state") {
+		std::string result = "{\"version\":" + radioJson(RADIO_VERSION) +
+			",\"deviceId\":" + radioJson(radioDiscovery.id().c_str()) +
+			",\"deviceName\":" + radioJson(radioDiscovery.name().c_str()) +
+			",\"token\":" + radioJson(web.token().c_str()) +
+			",\"revision\":" + radioJson(std::to_string(stations.identity())) +
+			",\"source\":" + radioJson(sdMode ? "sd" : "radio") +
+			",\"station\":" + radioJson(sdMode ? "SD KART" : stationName.c_str()) +
+			",\"track\":" + radioJson(trackTitle.c_str()) +
+			",\"status\":" + radioJson(statusText.c_str()) +
+			",\"genre\":" + radioJson(streamGenre.c_str()) +
+			",\"format\":" + radioJson(streamFormat.c_str()) +
+			",\"volume\":" + std::to_string(volume) +
+			",\"maxVolume\":" + std::to_string(settings.maxVolume) +
+			",\"muted\":" + (muted ? "true" : "false") +
+			",\"playing\":" + ((sdMode ? sdActive && !sdPaused : radioStarted) ? "true" : "false") +
+			",\"editing\":" + ((settingsEditing || network.setupOpen() || otaMode || stationDeletePending) ? "true" : "false") +
+			",\"current\":" + std::to_string(currentStation) + ",\"stations\":[";
+		for (size_t i = 0; i < stations.count(); ++i) {
+			if (i) result += ',';
+			result += radioJson(stations[i].name);
+		}
+		web.reply(200, "application/json; charset=utf-8", result + "]}"); return;
+	}
+	if (web.method == "GET" && web.path == "/api/stations") {
+		web.reply(200, "application/json; charset=utf-8",
+			"{\"revision\":" + radioJson(std::to_string(stations.identity())) +
+			",\"csv\":" + radioJson(writeStationCsv(webStationRecords())) + "}"); return;
+	}
+	if (web.method != "POST") { webMessage(web, 404, "Adres bulunamadı."); return; }
+	if (stationDeletePending) {
+		webMessage(web, 409, "Cihazda silme onayı açık. Önce Sil veya Vazgeç seçin."); return;
+	}
+	if (otaMode) { webMessage(web, 409, "Firmware güncelleniyor. Cihazın yeniden başlamasını bekleyin."); return; }
+	if (settingsEditing || network.setupOpen()) {
+		webMessage(web, 409, "Cihazda ayarlar açık. Önce cihazdaki Kaydet veya Vazgeç ile menüyü kapatın."); return;
+	}
+	if (web.path == "/api/validate" || web.path == "/api/stations") {
+		if (sdMode && web.path == "/api/stations") {
+			webMessage(web, 409, "SD müzik modunda istasyon listesi kaydedilemez. Önce Radyo kaynağına dönün."); return;
+		}
+		std::vector<StationRecord> candidate; std::string error;
+		if (!parseStationCsv(web.body, candidate, error)) { webMessage(web, 400, error); return; }
+		if (web.path == "/api/validate")
+			web.reply(200, "application/json; charset=utf-8", "{\"csv\":" + radioJson(writeStationCsv(candidate)) + "}");
+		else saveWebStations(web, candidate);
+		return;
+	}
+	if (web.path == "/api/command") {
+		RadioCommand command;
+		if (web.body == "volumeDown") command.action = RadioAction::VolumeDown;
+		else if (web.body == "volumeUp") command.action = RadioAction::VolumeUp;
+		else if (web.body == "mute") command.action = RadioAction::ToggleMute;
+		else if (web.body == "previous") command.action = RadioAction::PreviousStation;
+		else if (web.body == "next") command.action = RadioAction::NextStation;
+		else if (web.body == "play") command.action = RadioAction::StartPlayback;
+		else if (web.body == "pause") command.action = RadioAction::PausePlayback;
+		else if (web.body == "toggle") command.action = RadioAction::ToggleMusicPause;
+		else if (web.body == "stop") command.action = RadioAction::StopPlayback;
+		else if (web.body == "radio") command.action = RadioAction::SwitchRadio;
+		else if (web.body.compare(0, 7, "select:") == 0) {
+			if (web.revision != std::to_string(stations.identity())) {
+				webMessage(web, 409, "İstasyon listesi değişti; sayfanın yenilenmesini bekleyin."); return;
+			}
+			const std::string index = web.body.substr(7);
+			if (index.empty() || index.size() > 2) { webMessage(web, 400, "Geçersiz istasyon."); return; }
+			size_t selected = 0;
+			for (char c : index) {
+				if (c < '0' || c > '9') { webMessage(web, 400, "Geçersiz istasyon."); return; }
+				selected = selected * 10 + c - '0';
+			}
+			if (selected >= stations.count()) { webMessage(web, 400, "İstasyon bulunamadı."); return; }
+			command.action = RadioAction::SelectStation; command.stationIndex = selected;
+		} else { webMessage(web, 400, "Bilinmeyen kumanda komutu."); return; }
+		processCommand(command);
+		webMessage(web, 200, "Komut uygulandı."); return;
+	}
+	webMessage(web, 404, "Adres bulunamadı.");
 }
 
 void serviceWifi() {
     network.loop();
-    if (network.takeSetupRequest() && !sdMode) openWifiSetup();
+    // Keep a pending setup request until the deletion confirmation is closed.
+    if (!stationDeletePending && network.takeSetupRequest() && !sdMode && !otaMode) openWifiSetup();
     std::vector<String> names;
     if (network.takeScanResults(names)) screen.showWifiNetworks(names);
     const bool connected = network.connected();
     if (connected && !lastWifiConnected) {
         lastWifiConnected = true;
-        radioWeb.begin(handleWebRequest);
+        radioWeb.begin(handleWebRequest, handleFirmwareUpload);
         Serial.print("Wi-Fi baglandi. IP: "); Serial.println(WiFi.localIP());
         if (!sdMode) {
             if (playbackRequested) startStation(currentStation);
             else { statusText = "Başlatmak için istasyon seçin"; screenDirty = true; }
         }
     } else if (!connected && lastWifiConnected) pauseForWifi();
+    radioDiscovery.loop(connected);
     if (network.setupOpen()) screen.updateWifi(network.message(), network.busy(), network.scanning());
 }
 
 void setup() {
 	Serial.begin(115200);
-	delay(1500);
+	delay(200);
 
 	Serial.println("\n--- Internet Radyo: Ekran ve Ses ---");
 	Serial.printf("PSRAM: %u bayt\n",
@@ -1088,19 +1322,20 @@ void setup() {
 		return;
 	}
 
-    stations.load();
-    setStationSettingsIdentity(stations.identity());
-    loadRadioSettings(settings, stations.count());
-    setRadioLanguage(settings.language);
-    uint8_t lastVolume = settings.bootVolume;
-    size_t lastStation = settings.bootStation;
-    loadLastPlayback(lastVolume, lastStation, stations.count());
-    loadPlaybackResume(sourceResume);
-    sdMode = sourceResume.sd;
-    volume = settings.rememberVolume ? lastVolume : settings.bootVolume;
-    if (volume > settings.maxVolume) volume = settings.maxVolume;
-    currentStation = settings.resumeStation ? lastStation : settings.bootStation;
-    stationName = stations[currentStation].name;
+	stations.load();
+	stationFavorites.load();
+	setStationSettingsIdentity(stations.identity());
+	loadRadioSettings(settings, stations.count());
+	setRadioLanguage(settings.language);
+	uint8_t lastVolume = settings.bootVolume;
+	size_t lastStation = settings.bootStation;
+	loadLastPlayback(lastVolume, lastStation, stations.count());
+	loadPlaybackResume(sourceResume);
+	sdMode = sourceResume.sd;
+	volume = settings.rememberVolume ? lastVolume : settings.bootVolume;
+	if (volume > settings.maxVolume) volume = settings.maxVolume;
+	currentStation = settings.resumeStation ? lastStation : settings.bootStation;
+	stationName = stations[currentStation].name;
 
 	Serial.println("Ekran baslatiliyor...");
 
@@ -1111,48 +1346,64 @@ void setup() {
 		return;
 	}
 
-    screen.configureSettings(settings);
-    screen.applyScreenSettings(settings);
+	screen.configureSettings(settings);
+	screen.applyScreenSettings(settings);
+	screen.setFavorites(stationFavorites.mask(stations.data(), stations.count()));
 	drawScreen();
 
 	Serial.println("Ekran baslatildi.");
 
-    // Check optional storage before starting the stream; missing media is allowed.
-    screen.present();
-    runSdDiagnostics();
+	// Check optional storage before starting the stream; missing media is allowed.
+	screen.present();
+	const bool sdMounted = runSdDiagnostics();
 
-    audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
-    audio.forceMono(true);
-    audio.setVolume(muted ? 0 : volume);
-    audioReady = true;
-    applyEqualizer(settingsEditing ? previewSettings : settings);
-    playbackRequested = !sdMode && settings.autoPlay;
-    if (sdMode) restoreSdPlayback();
-    network.begin();
-    if (!sdMode) {
-        statusText = network.message();
-        trackTitle = settings.autoPlay ? "" : "Yayın bekliyor";
-        trackIsStatus = true;
-    }
-    screenDirty = true;
-    drawScreen();
-    serviceWifi();
+	if (!audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT)) {
+		Serial.println("HATA: I2S ses pinleri baslatilamadi.");
+		return; // Keep audioReady false so an unconfirmed OTA can roll back.
+	}
+	audio.forceMono(true);
+	audio.setVolume(muted ? 0 : volume);
+	audioReady = true;
+	applyEqualizer(settingsEditing ? previewSettings : settings);
+	playbackRequested = !sdMode && settings.autoPlay;
+	if (sdMode) restoreSdPlayback(sdMounted);
+	network.begin();
+	if (!sdMode) {
+		statusText = network.message();
+		trackTitle = settings.autoPlay ? "" : "Yayın bekliyor";
+		trackIsStatus = true;
+	}
+	screenDirty = true;
+	drawScreen();
+	serviceWifi();
 }
 
 void loop() {
-    if (!screenReady || !audioReady) { delay(1); return; }
-    // Feed the audio DMA before servicing touch and potentially expensive drawing.
-    if (radioStarted || (sdMode && sdActive)) audio.loop();
-    screen.loop();
-    serviceVu(); // Observe backlight-off/wake changes before the next audio feed.
-    processCommands();
-    serviceWifi();
-    radioWeb.loop();
-    serviceSdMusic();
-    persistSourceState(false);
-    serviceStreamConnection();
-    serviceStreamDetails();
-    persistPlayback();
+	radioOta.checkBoot(screenReady && audioReady);
+	if (!screenReady || !audioReady) { delay(1); return; }
+	if (otaMode) {
+		// Keep network alive during OTA while avoiding continuous LVGL timer redraws.
+		processCommands();
+		serviceWifi();
+		radioWeb.loop();
+		if (radioOta.restartReady()) ESP.restart();
+		delay(1);
+		return;
+	}
+	// Feed the audio DMA before servicing touch and potentially expensive drawing.
+	if (radioStarted || (sdMode && sdActive)) audio.loop();
+	screen.loop();
+	serviceVu(); // Observe backlight-off/wake changes before the next audio feed.
+	processCommands();
+	serviceWifi();
+	radioWeb.loop();
+	if (otaMode) { delay(1); return; }
+	serviceSdMusic();
+	persistSourceState(false);
+	serviceStreamConnection();
+	serviceFailedStationPrompt();
+	serviceStreamDetails();
+	persistPlayback();
 	if (radioStarted || (sdMode && sdActive)) {
 		audio.loop();
 	}
@@ -1160,7 +1411,7 @@ void loop() {
 	// Yalnızca bilgiler değiştiğinde ekranı yenile.
 	static uint32_t lastDraw = 0;
 
-	if (screenDirty && millis() - lastDraw >= 500) {
+	if (screenDirty && millis() - lastDraw >= 200) {
 		drawScreen();
 		lastDraw = millis();
 	}

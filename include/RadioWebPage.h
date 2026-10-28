@@ -13,24 +13,29 @@ static const char RADIO_WEB_PAGE[] PROGMEM = R"RADIOWEB(<!doctype html>
 <section><div class="row spread"><h2>Uzaktan kumanda</h2><span id="version" class="muted"></span></div>
 <div id="station">—</div><div id="track"></div><p id="status" class="muted">Cihaz bekleniyor…</p>
 <div class="row"><button data-command="previous">◀ Önceki</button><select id="playSelect" aria-label="Çalınacak istasyon"></select><button data-command="next">Sonraki ▶</button></div>
-<p class="row"><button data-command="volumeDown" aria-label="Sesi azalt">−</button><strong id="volume">—</strong><button data-command="volumeUp" aria-label="Sesi artır">+</button><button id="mute" data-command="mute">Sessize al</button><button data-command="play">Yayını başlat</button><button data-command="stop">Durdur</button></p>
+<p class="row"><button data-command="volumeDown" aria-label="Sesi azalt">−</button><strong id="volume">—</strong><button data-command="volumeUp" aria-label="Sesi artır">+</button><button id="mute" data-command="mute">Sessize al</button><button id="playBtn" data-command="play">Yayını başlat</button><button data-command="stop">Durdur</button><button id="radioBtn" data-command="radio" hidden>Radyoya dön</button></p>
 <small id="lock">Ekran ve web aynı radyo durumunu kullanır.</small></section>
 <div id="message" role="status" aria-live="polite"></div>
 <section id="editor"><div class="row spread"><h2>İstasyon yönetimi</h2><span id="draft">Kayıtlı liste</span></div>
-<p class="muted">Değişiklikler önce bu sayfada hazırlanır. Cihaza kaydetmeden cihazdaki liste değişmez. En fazla 32 istasyon / 12 KB.</p>
+<p class="muted">Değişiklikler önce bu sayfada hazırlanır. Cihaza kaydetmeden cihazdaki liste değişmez. En fazla 128 istasyon / 12 KB.</p>
 <div class="row"><label>CSV yükle <input id="file" type="file" accept=".csv,text/csv"></label><button id="download">Kayıtlı CSV’yi indir</button></div>
 <div class="scroll"><table><thead><tr><th>#</th><th>İstasyon adı</th><th>Doğrudan yayın adresi</th><th>İşlemler</th></tr></thead><tbody id="rows"></tbody></table></div>
 <p class="row"><button id="add">+ İstasyon ekle</button><span id="count" class="muted"></span></p>
 <div class="row"><button id="revert">Değişiklikleri geri al</button><button id="save" class="accent">Cihaza kaydet</button></div>
 <p class="muted">CSV biçimi: UTF-8, noktalı virgül, başlık <code>name;url</code>. Dosya yükleme tüm taslağı değiştirir. İnternetteki yayın adresinin çalışması ayrıca denenmelidir.</p></section>
-<footer>Bu sürümde uzaktan ses, sessize alma, istasyon seçimi ve yayın başlatma/durdurma vardır. Ekran, ekolayzer ve açılış tercihleri sonraki aşamada web üzerinden yönetilecek.</footer></main>
+<section id="firmware"><h2>Firmware güncelleme</h2>
+<p class="muted">Bu radyo projesinden derlenen <code>firmware.bin</code> dosyasını seçin. Oynatma durur; cihazda 3 saniyelik uyarı gösterilir. Flash yazılırken ekran kapanır; ilerlemeyi bu sayfadan izleyin. Başarı mesajından sonra radyo yeniden başlar. Beslemeyi kesmeyin.</p>
+<p><label>Firmware dosyası <input id="firmwareFile" type="file" accept=".bin,application/octet-stream"></label></p>
+<div class="row"><button id="firmwareUpload" class="accent" disabled>Güncellemeyi yükle</button><progress id="firmwareProgress" max="100" value="0" hidden aria-label="Firmware yükleme ilerlemesi"></progress></div>
+<p id="firmwareStatus" role="status" aria-live="polite" class="muted">Yalnızca uygulama dosyasını seçin; bootloader, partitions veya birleştirilmiş flash dosyası kullanmayın.</p></section>
+<footer>Radyo kumandası, istasyon yönetimi ve yerel ağdan firmware güncellemesi.</footer></main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-let token='',state=null,draft=[],baseRevision='',dirty=false,working=false,playerRevision='',queue=Promise.resolve();
+let token='',state=null,draft=[],baseRevision='',dirty=false,working=false,otaBusy=false,playerRevision='',queue=Promise.resolve();
 function message(t){$('message').textContent=t;}
 function changed(){dirty=true;$('draft').textContent='Kaydedilmemiş değişiklikler';}
-function run(fn,freeze=false){const task=async()=>{working=true;if(freeze)$('editor').inert=true;try{await fn();}catch(e){message(e.message);}finally{if(freeze)$('editor').inert=false;working=false;}};queue=queue.then(task,task);return queue;}
+function run(fn,freeze=false){if(otaBusy)return Promise.resolve();const task=async()=>{working=true;if(freeze)$('editor').inert=true;try{await fn();}catch(e){message(e.message);}finally{if(freeze)$('editor').inert=false;working=false;}};queue=queue.then(task,task);return queue;}
 async function api(path,body,headers={}){
  const response=await fetch(path,{method:body===undefined?'GET':'POST',cache:'no-store',headers:body===undefined?{}:{'Content-Type':'text/plain;charset=utf-8','X-Radio-Token':token,...headers},body});
  const raw=await response.text();let data;try{data=JSON.parse(raw);}catch{data={message:raw};}
@@ -42,9 +47,12 @@ async function refresh(){
  $('station').textContent=state.station;$('track').textContent=state.track;
  $('status').textContent=[state.status,state.genre?'Tür: '+state.genre:'',state.format].filter(Boolean).join(' · ');
  $('volume').textContent=state.volume;$('mute').textContent=state.muted?'Sesi aç':'Sessize al';
- $('lock').textContent=state.source==='sd'?'SD müzik modunda kumandayı cihaz ekranından kullanın. Web değişiklikleri için Radyo kaynağına dönün.':state.editing?'Cihazda ayarlar açık. Web değişiklikleri için önce cihazdaki menüyü kapatın.':'Ekran ve web aynı radyo durumunu kullanır.';
+ $('playBtn').textContent=state.source==='sd'?(state.playing?'Duraklat':'Oynat'):'Yayını başlat';
+ $('radioBtn').hidden=state.source!=='sd';
+ $('lock').textContent=state.editing?'Cihazda ayarlar açık. Web değişiklikleri için önce cihazdaki menüyü kapatın.':state.source==='sd'?'SD müzik modu etkin. İstasyon seçerek veya Radyoya dön ile radyoya geçebilirsiniz.':'Ekran ve web aynı radyo durumunu kullanır.';
  document.querySelectorAll('[data-command]').forEach(b=>b.disabled=state.editing);
  $('playSelect').disabled=state.editing;
+ $('save').disabled=state.editing||state.source==='sd';
  if(playerRevision!==state.revision){
   $('playSelect').replaceChildren();state.stations.forEach((name,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+name;$('playSelect').append(o);});playerRevision=state.revision;
  }
@@ -71,12 +79,12 @@ function render(){
   const actions=document.createElement('td');actions.className='actions';
   for(const [label,action] of [['↑',-1],['↓',1],['Sil',0]]){const b=document.createElement('button');b.textContent=label;b.disabled=(action===-1&&i===0)||(action===1&&i===draft.length-1);b.onclick=()=>{if(!action){if(!confirm('Bu istasyon taslaktan silinsin mi?'))return;draft.splice(i,1);}else [draft[i],draft[i+action]]=[draft[i+action],draft[i]];changed();render();};actions.append(b);}
   tr.append(actions);$('rows').append(tr);
- });$('count').textContent=draft.length+' / 32 istasyon';$('add').disabled=draft.length>=32;
+ });$('count').textContent=draft.length+' / 128 istasyon';$('add').disabled=draft.length>=128;
 }
 async function load(){const data=await api('/api/stations');draft=parseCsv(data.csv);baseRevision=data.revision;dirty=false;$('draft').textContent='Kayıtlı liste';render();}
-document.querySelectorAll('[data-command]').forEach(b=>b.onclick=()=>run(async()=>{const r=await api('/api/command',b.dataset.command);message(r.message);await refresh();}));
+document.querySelectorAll('[data-command]').forEach(b=>b.onclick=()=>run(async()=>{const command=b.dataset.command==='play'&&state?.source==='sd'&&state.playing?'pause':b.dataset.command;const r=await api('/api/command',command);message(r.message);await refresh();}));
 $('playSelect').onchange=()=>{const index=$('playSelect').value;run(async()=>{const r=await api('/api/command','select:'+index,{'X-Radio-Revision':playerRevision});message(r.message);await refresh();});};
-$('add').onclick=()=>{if(draft.length>=32)return;draft.push({name:'',url:''});changed();render();};
+$('add').onclick=()=>{if(draft.length>=128)return;draft.push({name:'',url:''});changed();render();};
 $('revert').onclick=()=>run(async()=>{if(dirty&&!confirm('Kaydedilmemiş değişiklikler silinsin mi?'))return;await load();message('Cihazdaki kayıtlı liste alındı.');},true);
 $('file').onchange=()=>run(async()=>{
  try{const file=$('file').files[0];if(!file)return;if(file.size>12288)throw new Error('Dosya 12 KB sınırını aşıyor.');if(dirty&&!confirm('Yüklenen dosya mevcut taslağın tamamını değiştirecek. Devam edilsin mi?'))return;
@@ -88,7 +96,46 @@ $('save').onclick=()=>run(async()=>{
  try{result=await api('/api/stations',data,headers);}catch(e){if(e.code!=='playing_removed')throw e;if(!confirm(e.message))return;result=await api('/api/stations',data,{...headers,'X-Radio-Confirm':'stop'});}
  await load();await refresh();message(result.message);
 },true);
-window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
+$('firmwareFile').onchange=()=>{$('firmwareUpload').disabled=!$('firmwareFile').files.length;};
+function sendFirmware(file){return new Promise((resolve,reject)=>{
+ const xhr=new XMLHttpRequest();xhr.open('POST','/api/firmware');xhr.timeout=180000;
+ xhr.setRequestHeader('Content-Type','application/octet-stream');xhr.setRequestHeader('X-Radio-Token',token);xhr.setRequestHeader('X-Radio-Confirm','update');
+ xhr.upload.onprogress=e=>{if(e.lengthComputable){const value=Math.floor(e.loaded*100/e.total);$('firmwareProgress').value=value;$('firmwareStatus').textContent=value===100?'Dosya gönderildi. Cihazda doğrulanıyor…':'Firmware gönderiliyor: %'+value;}};
+ xhr.onload=()=>{let result;try{result=JSON.parse(xhr.responseText);}catch{result={message:xhr.responseText};}if(xhr.status===200)resolve(result);else reject(new Error(result.message||'Güncelleme reddedildi.'));};
+ xhr.onerror=xhr.ontimeout=xhr.onabort=()=>reject(new Error('Güncelleme bağlantısı kesildi. Radyonun durumunu kontrol edin; kendiliğinden tekrar yükleme yapılmadı.'));
+ xhr.send(file);
+});}
+async function waitForRadio(oldToken,id){
+ const deadline=Date.now()+75000;
+ while(Date.now()<deadline){
+  await new Promise(r=>setTimeout(r,2000));const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),3000);
+  try{const response=await fetch('/api/state',{cache:'no-store',signal:controller.signal});if(response.ok){const next=await response.json();if(next.deviceId===id&&next.token&&next.token!==oldToken)return next;}}
+  catch{}finally{clearTimeout(timer);}
+ }
+ throw new Error('Yükleme doğrulandı; radyonun yeniden bağlantısı henüz görülmedi. Cihaz ekranını ve ağ bağlantısını kontrol edip sayfayı yeniden açın.');
+}
+$('firmwareUpload').onclick=()=>{
+ if($('firmwareUpload').disabled)return Promise.resolve();$('firmwareUpload').disabled=true;
+ return run(async()=>{
+ const file=$('firmwareFile').files[0];if(!file)return;
+ try{
+  await refresh();const info=await api('/api/firmware');
+  if(!file.name.toLowerCase().endsWith('.bin')||file.size<288||file.size>info.maxSize)throw new Error('Uygun boyutta bir firmware.bin dosyası seçin.');
+  const header=new Uint8Array(await file.slice(0,36).arrayBuffer());
+  if(header[0]!==233||header[12]!==9||header[13]!==0||header[23]!==1||header[32]!==50||header[33]!==84||header[34]!==205||header[35]!==171)throw new Error('Dosya ESP32-S3 uygulama firmware biçiminde değil.');
+  if(!confirm(file.name+' ('+(file.size/1048576).toFixed(2)+' MB) yüklensin mi?\nOynatma duracak ve radyo yeniden başlayacak.'+(dirty?'\nKaydedilmemiş istasyon taslağı yeniden yüklemede kaybolacak.':'')))return;
+  otaBusy=true;$('firmwareUpload').disabled=true;$('firmwareFile').disabled=true;
+  document.querySelectorAll('main>section:not(#firmware)').forEach(s=>s.inert=true);
+  $('firmwareProgress').hidden=false;$('firmwareProgress').value=0;$('firmwareStatus').textContent='Güncelleme başlatılıyor…';
+  const oldToken=token,id=state.deviceId;await sendFirmware(file);
+  $('firmwareStatus').textContent='Firmware doğrulandı. Radyo yeniden başlatılıyor; bağlantı bekleniyor…';
+  const next=await waitForRadio(oldToken,id);
+  $('firmwareStatus').textContent='Güncelleme tamamlandı. Firmware '+next.version+' çalışıyor.';
+  dirty=false;otaBusy=false;location.reload();
+ }catch(e){$('firmwareStatus').textContent=e.message;}
+ finally{otaBusy=false;$('firmwareUpload').disabled=false;$('firmwareFile').disabled=false;document.querySelectorAll('main>section:not(#firmware)').forEach(s=>s.inert=false);}
+});};
+window.addEventListener('beforeunload',e=>{if(dirty||otaBusy){e.preventDefault();e.returnValue='';}});
 run(async()=>{await refresh();await load();},true);
 setInterval(()=>{if(!working)run(refresh);},2000);
 </script></html>)RADIOWEB";

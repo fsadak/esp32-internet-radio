@@ -1,7 +1,9 @@
 # Türkiye radyo listeleri
 
 Koleksiyon 222 kanal içerir: 190 doğrudan MP3/AAC ve 32 HLS adresi.
-Listeler cihazın 32 istasyon sınırına uygun dosyalara ayrılmıştır.
+Hazır listeler önceki 32 istasyon sınırına göre dosyalara ayrılmıştır.
+0.14.1 sürümü 12 KiB içinde en fazla 128 kayıt kabul eder; mevcut dosyalar
+değiştirilmeden kullanılabilir. Yeni kapasitenin cihaz doğrulaması beklenmektedir.
 Tam içerik, kaynaklar ve kontrol kapsamı için [kataloğu](KATALOG.md) inceleyin.
 
 ## SD karttan kullanım

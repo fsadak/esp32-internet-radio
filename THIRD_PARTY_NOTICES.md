@@ -1,6 +1,6 @@
 # Third-party sources and notices
 
-Review date: **2026-10-22**. Firmware: **0.10.0**.
+Review date: **2026-10-28**. Firmware: **0.12.0**.
 
 **Dependency licensing review remains open.** The
 application's original contributions have a GPLv3 grant in AUTHORS.md. This file

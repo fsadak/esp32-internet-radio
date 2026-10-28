@@ -4,6 +4,7 @@
 #include <esp32_smartdisplay.h>
 #include "RadioSettings.h"
 #include "StationStore.h"
+#include "StationFavorites.h"
 #include "SdMusicFiles.h"
 
 enum class RadioAction : uint8_t {
@@ -16,7 +17,9 @@ enum class RadioAction : uint8_t {
     OpenWifi, CloseWifi, ScanWifi, ConnectWifi,
     OpenMusic, CloseMusic, SelectMusic, MusicPreviousPage, MusicNextPage,
     ToggleMusicPause, SwitchRadio, ScanMusic, ToggleRepeatOne, ToggleRepeatAll, ToggleShuffle,
-    MusicParent, MusicSeekBack, MusicSeekForward
+    MusicParent, MusicSeekBack, MusicSeekForward, PausePlayback,
+    ToggleFavorite, OpenFavorites, CloseFavorites, FavoritesPreviousPage, FavoritesNextPage,
+    RequestDeleteStation, ConfirmDeleteStation, CancelDeleteStation
 };
 
 struct RadioCommand {
@@ -35,16 +38,20 @@ public:
     void present(); // One-shot refresh before a blocking station connection.
     void updateVu(uint16_t level, uint16_t peak); // 0..1000, no animation.
     bool vuActive() const { return vuEnabled_ && !backlightOff_; }
-    void update(const String& station, const String& track,
-                const String& status, const String& genre, const String& format,
-                bool wifiConnected, uint8_t volume,
-                bool muted, size_t currentStation);
+	void update(const String& station, const String& track,
+	            const String& status, const String& genre, const String& format,
+	            bool wifiConnected, uint8_t volume,
+	            bool muted, size_t currentStation, bool trackIsStatus = false);
     bool takeCommand(RadioCommand& command);
     void configureSettings(const RadioSettings& settings);
     void applyScreenSettings(const RadioSettings& settings);
     void finishSettings(bool close, const char* message = "");
     void setVolumeLimit(uint8_t limit) { volumeLimit_ = limit; }
     void setStations(const RadioStation* stations, size_t count);
+    void setFavorites(const StationFavoriteMask& mask);
+    void showStationDelete(const String& name, bool unavailable, bool canDelete);
+    void showStationDeleteError(const String& message);
+    void closeStationDelete(bool closeList = false);
     void showImportFiles(const std::vector<String>& files, const String& message);
     void showImportPreview(const String& file, size_t count);
     void showImportMessage(const String& message);
@@ -54,29 +61,38 @@ public:
     void clearWifiPassword();
     void showWifiNetworks(const std::vector<String>& names);
     void updateWifi(const String& message, bool busy, bool scanning);
-    void setMusicState(bool source, bool playing, bool paused, size_t index, size_t count,
-                       uint32_t elapsed, uint32_t duration, uint8_t repeat, bool shuffle,
-                       const String& playingPath, bool canSeek);
-    void showMusicFolder(const String& folder, const std::vector<SdMusicEntry>& entries, const String& message);
+	void setMusicState(bool source, bool playing, bool paused, size_t index, size_t count,
+	                   uint32_t elapsed, uint32_t duration, uint8_t repeat, bool shuffle,
+	                   const String& playingPath, bool canSeek);
+	void showMusicFolder(const String& folder, const std::vector<SdMusicEntry>& entries, const String& message);
+    void beginOta();
+    void showOtaNotice(bool completed);
+    void endOta(); // Restore the display after a rejected/aborted update.
 
 private:
-    static void onButton(lv_event_t* event);
-    static void onStation(lv_event_t* event);
-    static void onSettingChanged(lv_event_t* event);
-    static void onSettingsTab(lv_event_t* event);
-    static void onEqualizer(lv_event_t* event);
-    static void onWifiInput(lv_event_t* event);
-    static void onWifiNetwork(lv_event_t* event);
-    static void onMusicFile(lv_event_t* event);
-    static void onWake(lv_event_t* event);
-    static void onImportFile(lv_event_t* event);
-    void refreshStationRows();
-    void refreshImportRows();
-    void buildImport();
-    void buildSettings();
-    void buildWifi();
-    void buildMusic();
-    void refreshMusicRows();
+	static void onButton(lv_event_t* event);
+	static void onStation(lv_event_t* event);
+    static void onStationDelete(lv_event_t* event);
+    static void onFavoriteStation(lv_event_t* event);
+    static void drawFavoriteHeart(lv_event_t* event);
+    void refreshFavoriteHeart();
+    void buildFavorites();
+    void refreshFavoriteTiles();
+	static void onSettingChanged(lv_event_t* event);
+	static void onSettingsTab(lv_event_t* event);
+	static void onEqualizer(lv_event_t* event);
+	static void onWifiInput(lv_event_t* event);
+	static void onWifiNetwork(lv_event_t* event);
+	static void onMusicFile(lv_event_t* event);
+	static void onWake(lv_event_t* event);
+	static void onImportFile(lv_event_t* event);
+	void refreshStationRows();
+	void refreshImportRows();
+	void buildImport();
+	void buildSettings();
+	void buildWifi();
+	void buildMusic();
+	void refreshMusicRows();
     void openSettings();
     void refreshSettingsLabels();
     void refreshDeviceInfo();
@@ -87,6 +103,19 @@ private:
     const RadioStation* stations_ = nullptr;
     size_t stationCount_ = 0;
     lv_obj_t* station_ = nullptr;
+    lv_obj_t* favoriteHeart_ = nullptr;
+    lv_obj_t* favoritesButton_ = nullptr;
+    lv_obj_t* favoritesOverlay_ = nullptr;
+    lv_obj_t* favoriteTiles_[8] = {};
+    lv_obj_t* favoriteImages_[8] = {}; // Reserved containers for future logos.
+    lv_obj_t* favoriteNames_[8] = {};
+    size_t favoriteTileStations_[8] = {};
+    lv_obj_t* favoritesEmpty_ = nullptr;
+    lv_obj_t* favoritesPageLabel_ = nullptr;
+    lv_obj_t* favoritesPrevious_ = nullptr;
+    lv_obj_t* favoritesNext_ = nullptr;
+    StationFavoriteMask favoritesMask_;
+    size_t favoritesPage_ = 0;
     lv_obj_t* vuTrack_ = nullptr;
     lv_obj_t* vuFill_ = nullptr;
     lv_obj_t* vuPeak_ = nullptr;
@@ -116,6 +145,12 @@ private:
     lv_obj_t* next_ = nullptr;
     lv_obj_t* stationOverlay_ = nullptr;
     lv_obj_t* stationList_ = nullptr;
+    lv_obj_t* stationRows_[5] = {};
+    lv_obj_t* stationDeleteOverlay_ = nullptr;
+    lv_obj_t* stationDeleteName_ = nullptr;
+    lv_obj_t* stationDeleteHint_ = nullptr;
+    lv_obj_t* stationDeleteError_ = nullptr;
+    lv_obj_t* stationDeleteConfirm_ = nullptr;
     size_t stationPage_ = 0;
     size_t currentStation_ = 0;
     lv_obj_t* stationPageLabel_ = nullptr;
@@ -173,8 +208,12 @@ private:
     lv_obj_t* musicPagePrevious_ = nullptr;
     lv_obj_t* musicPageNext_ = nullptr;
     lv_obj_t* musicParent_ = nullptr;
-    lv_obj_t* musicFolderLabel_ = nullptr;
-    std::vector<SdMusicEntry> musicEntries_;
+	lv_obj_t* musicFolderLabel_ = nullptr;
+	bool otaDisplayActive_ = false;
+	lv_obj_t* otaNotice_ = nullptr;
+	lv_obj_t* otaNoticeTitle_ = nullptr;
+	lv_obj_t* otaNoticeHint_ = nullptr;
+	std::vector<SdMusicEntry> musicEntries_;
     String musicPlayingPath_;
     size_t musicPage_ = 0, musicIndex_ = 0, musicCount_ = 0;
     bool musicSource_ = false;

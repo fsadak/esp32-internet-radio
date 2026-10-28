@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-constexpr const char* RADIO_VERSION = "0.10.0";
+constexpr const char* RADIO_VERSION = "0.14.1";
 void setStationSettingsIdentity(uint32_t identity);
 enum class RadioLanguage : uint8_t { English = 0, Turkish = 1 };
 

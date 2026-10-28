@@ -2,13 +2,26 @@
 
 An ESP32-S3 touchscreen internet radio and offline SD MP3 player with a black-and-orange interface, English/Turkish device menus, and local web control.
 
-**Project creator & maintainer: fsadak** · **Firmware: 0.10.0** · **PlatformIO / Arduino**
+**Project creator & maintainer: fsadak** · **Firmware: 0.14.1** · **PlatformIO / Arduino**
 
 **English** | [Türkçe](README.tr.md)
 
 ![Black-and-orange radio interface design preview](design/tanitim/ana-ekran.png)
 
 *Earlier interface design preview, not a photograph or capture from the device. The current firmware also includes SD MP3 controls and language selection.*
+
+## Release 0.14.1 — final SD/MP3 version before battery integration
+
+This release preserves the SD/MP3 feature set. Battery sensing and charge-state UI
+are not implemented. Radio-only/battery work will continue separately; v0.14.1
+remains available as a fixed tag. General device use has been confirmed; no new
+build, upload or hardware tests were performed for this publication.
+
+Known snapshot limits: the station catalog accepts 128 records within 12 KiB, but
+web selection currently accepts only two-digit zero-based indices (0–99). The
+Android 0.2.0 source accepts at most 32 stations. These limits are retained here
+rather than changing this preserved version. Use the device screen for later
+station indices. Power-failure/OTA rollback cases need separate validation.
 
 ## Features
 
@@ -24,9 +37,26 @@ An ESP32-S3 touchscreen internet radio and offline SD MP3 player with a black-an
 | Local web interface | Radio control, station editing/reordering, CSV import/export and device status |
 | Display | Adjustable brightness, automatic dimming, backlight off and touch-to-wake |
 | VU meter | Horizontal digital level bar and peak marker; optional in Settings; measurement and drawing stop while the backlight is off |
+| Favorites | Persistent heart selection and a paginated 4 × 2 tile screen; radio placeholders and single-line names up to 20 characters. Device-specific regression testing remains applicable. |
 | Startup | Remembers the last radio/MP3 source and the last selected MP3 file |
 
+Station-list rows include a delete button with confirmation. Failed radio connections can offer deletion after retries; temporary unavailability is not treated as proof that a station has permanently closed. The last station is protected. These new device flows await hardware validation; see [station management](design/STATION-LISTS.md).
+
 The initial station is **SomaFM Groove Salad**. You can replace the station list with your own.
+
+## Android remote and automatic discovery
+
+The Radyo Kumandası 0.2.0 Android project is in `android-app/`. Use **Radyoları bul** to list and select radios on the local network. Long-press a device to save a phone-local name. The app remembers the selected device and rediscovers its identity on returning to the foreground. Manual IP entry remains available.
+
+Firmware 0.11.0 advertises `_esp32-radio._tcp` on TCP 80 with `app`, `id`, `model`, `fw`, and `api` TXT records. Its stable device ID is derived from the Wi-Fi MAC address. `/api/state` includes `deviceId` and `deviceName`. The app resolves to a local IPv4 address, preserving existing HTTP Host validation. The service restarts after Wi-Fi reconnection or IP changes.
+
+Discovery requires firmware 0.11.0 or later on the radio. Earlier firmware can still be controlled by manual IP entry. Devices must share a local network without client isolation or multicast blocking. Firmware compilation has passed; discovery and streaming together still require a physical-device check. See the [Android project guide](android-app/README.md).
+
+## Firmware update over the local web interface
+
+Firmware **0.12.0** adds application OTA upload to the built-in web page. Install this first OTA-capable release over USB. For subsequent updates, choose the project build output .pio/build/esp32_radio/firmware.bin in **Firmware güncelleme** and confirm the upload. Playback stops during transfer; the image is written to the inactive OTA slot, verified, then selected for boot. The device shows a static three-second start notice, then turns the backlight off during flash writes; progress is shown in the browser. A rejected or failed update restores normal brightness. After successful verification and boot-slot selection, the screen shows a completion notice until reboot. The browser waits for the radio to return. Partition/NVS layout is unchanged. No Android app update is needed.
+
+The transport retains Host/Origin/token checks and requires a product marker, ESP32-S3 application header, image size, and SDK image integrity validation. Boot confirmation requires display initialisation and I2S pin setup to succeed, followed by at least 10 seconds of main-loop operation. This is a trusted-LAN interface without separate login or firmware signing. The successful OTA flow, including start/completion notices, has been checked on hardware; interruption and rollback scenarios still require separate validation. See [OTA instructions (Turkish)](OTA_GUNCELLEME.md) and [host checks](tests/ota-host/README.md).
 
 ## Hardware
 
@@ -137,8 +167,10 @@ Groove Salad;https://ice5.somafm.com/groovesalad-128-mp3
 
 | Limit | Value |
 | --- | ---: |
-| Stations stored on the device | 32 |
+| Stations stored on the device | Up to 128, within the CSV size limit |
 | CSV file size | 12 KiB |
+
+Version 0.14.1 raises the station limit to 128, including favorites beyond station 32. The 12 KiB CSV limit remains: long names/URLs may reach it before 128 entries. The existing 20 KiB NVS partition is shared with settings, Wi-Fi and favorites; a full NVS can still reject a save while preserving the previous list. The partition layout and saved record format are unchanged. Device validation is pending.
 | Station name | 96 bytes |
 | Stream URL | 512 bytes |
 
@@ -168,8 +200,8 @@ The current web interface provides radio playback controls, volume/mute, station
 **Current boundaries:**
 
 - The web interface is currently **Turkish only**; device language selection does not translate it.
-- Web changes are blocked while local settings/Wi-Fi setup are open and while the source is SD MP3. Status remains readable.
-- There is no web MP3 browser or MP3 upload/control yet.
+- Web changes are blocked while local settings/Wi-Fi setup are open. While the source is SD MP3, remote playback/volume controls and switching back to Radio remain available, whereas saving a station list is blocked.
+- There is no web MP3 folder browser or MP3 file upload yet.
 - The server uses local HTTP without login or TLS. It is intended for a trusted LAN; internet exposure and port forwarding are outside the supported setup.
 
 ## Display and sound settings
@@ -197,12 +229,11 @@ The last radio/MP3 source is remembered. Radio startup follows the configured au
 ## Roadmap
 
 - Redesign and extend the web interface, including English support and more device controls.
-- Add firmware updates over the local web interface (OTA); not implemented yet.
 - Add station-list merge/append as an alternative to replacement.
-- Continue network, storage, error-path and long-duration testing.
+- Continue network, storage, error-path and long-duration testing, including physical-device verification of web OTA updates and rollback.
 - Later hardware work: **two 3200 mAh 18650 cells in a 1S2P pack**, UPS power integration and external status LEDs. This is a plan, not an installed or tested battery system. An on-screen battery gauge is currently out of scope.
 
-Folder browsing, ±10-second seeking, source/file recall and English/Turkish device menus are already implemented. Resuming a saved MP3 time position is not a pending feature; that requirement was withdrawn.
+Folder browsing, ±10-second seeking, source/file recall, English/Turkish device menus and local web OTA firmware upload are already implemented. Resuming a saved MP3 time position is not a pending feature; that requirement was withdrawn.
 
 ## Project layout and documentation
 
@@ -225,6 +256,7 @@ Detailed engineering notes are currently mainly in Turkish:
 - [Settings](design/SETTINGS.md)
 - [Web interface](design/WEB-INTERFACE.md)
 - [Battery plan — deferred hardware work](design/BATTERY-POWER.md)
+- [Favorites](design/FAVORITES.md)
 - [Roadmap](design/TODO.md)
 
 Generated font sources are included; regeneration is documented under [design/fonts](design/fonts).

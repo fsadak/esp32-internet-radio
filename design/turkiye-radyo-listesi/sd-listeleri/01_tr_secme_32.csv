@@ -1,33 +1,32 @@
 ﻿name;url
-Radyo 7;"http://46.20.3.250/;stream"
-Süper FM;https://playerservices.streamtheworld.com/api/livestream-redirect/SUPER_FM_SC
-JoyTürk;https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK_SC
-TRT FM;https://trt.radyotvonline.net/trtfm
-Slow Türk;https://radyo.duhnet.tv/ak_dtvh_slowturk
-PowerTürk;https://listen.powerapp.com.tr/powerturk/mpeg/icecast.audio
-Power FM;https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio
-Radyo D;https://radyo.duhnet.tv/radyod
-Show Radyo;http://showradyo.radyotvonline.net/showradyoaac/
 Alem FM;https://turkmedya.radyotvonline.net/alemfmaac
-Radyo Fenomen;https://live.radyofenomen.com/fenomen/128/icecast.audio
+Best Fm;http://46.20.7.125/listen.pls
+İmbat Fm;http://38.96.148.39:8788/
+İstanbul Fm;"http://45.32.154.169:9300/;"
+JoyTürk;https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK_SC
+Kafa Radyo;https://moondigitaledge2.radyotvonline.net/kafaradyo/playlist.m3u8
+Kordon Fm;http://38.96.148.39:8588
+Kral Pop;http://46.20.3.201:80/
 Metro FM;https://playerservices.streamtheworld.com/api/livestream-redirect/METRO_FMAAC_SC
-Joy FM;https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FMAAC_SC
-Virgin Radio Türkiye;https://playerservices.streamtheworld.com/api/livestream-redirect/VIRGIN_RADIO_ITUNES.mp3
-Radio Mydonose;https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_MYDONOSE128AAC.aac
-Pal Station;http://shoutcast.radyogrup.com:1020/
-Baba Radyo;http://officialbabaradyo.radyotvonline.net/babaofficial
-Radyo Seymen;https://yayin.radyoseymen.com.tr:1070/stream
-Radyo Ekin;http://yayin.turkhosted.com:6006/
-Radyo Alaturka;https://yayin.jumboserver.net:9100/stream
-Radyo ODTÜ;"http://stream.radyoodtu.com.tr/;"
-Radyo Eksen;"http://eksenwmp.radyotvonline.com/;stream.mp3"
-Radyo Voyage;"http://voyagewmp.radyotvonline.com/;"
-Borusan Klasik;https://playerservices.streamtheworld.com/api/livestream-redirect/BORUSAN_KLASIKAAC_SC
-JoyTürk Akustik;http://playerservices.streamtheworld.com/api/livestream-redirect/JOYTURK_AKUSTIK128AAC.aac
+Number One Fm;http://n10101m.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e2f95dcb16_1/playlist.m3u8
 Pop 90;https://playerservices.streamtheworld.com/api/livestream-redirect/POP90128AAC.aac
-Retro Türk;https://playerservices.streamtheworld.com/api/livestream-redirect/RETROTURKAAC_SC
-TRT Radyo 1;https://trt.radyotvonline.net/trt1
-TRT Radyo Haber;https://trt.radyotvonline.net/trthaber
-NTV Radyo;http://ntvrdwmp.radyotvonline.com/
-Habertürk Radyo;https://haberturkradyo.radyotvonline.net/haberturkradyo
-Radyo Spor;http://46.20.4.5:8170/
+Power FM;https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio
+Power Pop;https://listen.powerapp.com.tr/powerpop/abr/playlist.m3u8
+PowerTürk;https://listen.powerapp.com.tr/powerturk/mpeg/icecast.audio
+Radio Mydonose;https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_MYDONOSE128AAC.aac
+Radyo 45'lik;http://stream.radyo45lik.com:4545/stream
+Radyo 7;"http://46.20.3.250/;stream"
+Radyo Alaturka;https://yayin.jumboserver.net:9100/stream
+Radyo D;https://radyo.duhnet.tv/radyod
+Radyo Dejavu;https://radyodejavu.80.yayin.com.tr
+Radyo Ege;"http://stream2.taksimbilisim.com:8010/;"
+Radyo Eksen;"http://eksenwmp.radyotvonline.com/;stream.mp3"
+Radyo Fenomen;https://live.radyofenomen.com/fenomen/128/icecast.audio
+Radyo Trio;http://radyotrio.radyotvonline.net/radyotrio
+Radyo Turkuvaz;https://trkvz-radyolar.ercdn.net/radyoturkuvaz/playlist.m3u8
+Radyo Viva;"http://46.20.3.230/;"
+Show Radyo;http://showradyo.radyotvonline.net/showradyoaac/
+Slow Türk;https://radyo.duhnet.tv/ak_dtvh_slowturk
+Süper FM;https://playerservices.streamtheworld.com/api/livestream-redirect/SUPER_FM_SC
+TRT FM;https://trt.radyotvonline.net/trtfm
+Virgin Radio Türkiye;https://playerservices.streamtheworld.com/api/livestream-redirect/VIRGIN_RADIO_ITUNES.mp3

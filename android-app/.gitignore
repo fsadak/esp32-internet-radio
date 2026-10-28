@@ -1,0 +1,6 @@
+.gradle/
+**/build/
+private/
+local.properties
+tests/classes/
+tests/*.jsonl
